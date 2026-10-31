@@ -3,23 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mapa de procesos</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<title>Arquitectura de procesos</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#142033;--quiet:#5A6878;--line:#D9E1EA;--soft:#F4F7FB;--card:#FFFFFF;--blue:#0B4F80;--blue2:#0072BC;--tint:#E3F0FA;--new:#0072BC;--wip:#8A4512;--wipbg:#FCEBDD;--ok:#1F6B4A;--okbg:#E2F3EC;--tbc:#5A4A00;--tbcbg:#FFF4C2}
+:root{--ink:#142033;--quiet:#5A6878;--line:#D9E1EA;--soft:#F4F7FB;--card:#FFFFFF;--blue:#0B4F80;--blue2:#0072BC;--tint:#E3F0FA;--wip:#8A4512;--wipbg:#FCEBDD;--ok:#1F6B4A;--okbg:#E2F3EC;--tbc:#5A4A00;--tbcbg:#FFF4C2}
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--soft);color:var(--ink);font-family:'DM Sans',system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.45}
-a{color:var(--blue2)}a:hover{color:var(--blue)}
-.page{display:none;max-width:1280px;margin:0 auto;padding:0 0 32px}
+button{font:inherit;color:inherit}
+.page{display:none;max-width:1280px;margin:0 auto;padding:28px 24px 32px}
 .page.on{display:block}
-#mapa{padding:32px 24px}
-.eyebrow{margin:0 0 6px;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--blue2)}
 h1{margin:0;font-size:28px;font-weight:600;letter-spacing:-.01em}
-.lead{margin:8px 0 0;color:var(--quiet);max-width:760px}
-.mhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:24px}
-.pill{display:inline-flex;align-items:center;min-height:26px;padding:2px 12px;border-radius:13px;font-size:12.5px;font-weight:500;background:#1F6497;color:#fff}
-.pill.dark{background:var(--blue)}
+.mhead{margin-bottom:20px}
 .mapwrap{display:grid;grid-template-columns:28px minmax(0,1fr) 28px;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 16px}
 .side{writing-mode:vertical-rl;transform:rotate(180deg);font-size:11px;letter-spacing:.08em;color:var(--quiet);text-align:center;border-left:2px solid var(--blue2);padding-left:6px}
 .side.r{transform:none;border-left:0;border-right:2px solid var(--blue2);padding:0 6px 0 0}
@@ -27,55 +21,32 @@ h1{margin:0;font-size:28px;font-weight:600;letter-spacing:-.01em}
 .band-lbl:first-child{margin-top:0}
 .row4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.mbox{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;min-height:64px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);text-decoration:none;font-size:13.5px;transition:border-color .15s,box-shadow .15s}
-.mbox:hover,.mbox:focus-visible{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(0,114,188,.15);color:var(--ink)}
-.mbox.muted{color:#3D4B5C}
-.mbox.new{border:2px solid var(--new);background:var(--tint);font-weight:600}
+.mbox{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;width:100%;min-height:64px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-size:13.5px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.mbox:hover,.mbox:focus-visible{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(0,114,188,.15);outline:none}
 .chainrow{display:grid;grid-template-columns:minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr) 24px minmax(0,1fr);align-items:stretch}
 .marr{display:flex;align-items:center;justify-content:center;color:#7C8B9C}
-.mbox.mis{border:1.5px solid var(--blue);min-height:112px;font-weight:600;font-size:14px;gap:4px}
+.mbox.mis{border:1.5px solid var(--blue);min-height:118px;font-weight:600;font-size:14px;gap:4px}
 .mbox.mis .n{display:inline-flex;width:24px;height:24px;border-radius:12px;background:var(--blue);color:#fff;font-size:12px;align-items:center;justify-content:center;margin-bottom:4px}
 .mbox.mis .sub{font-weight:400;font-size:12px;color:var(--quiet)}
-.ret{margin:10px 0 0;font-size:12.5px;color:var(--blue2)}
 .mbox.trans{background:var(--soft);min-height:52px;font-size:13px}
-.legend{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:16px 0 0;font-size:12px;color:var(--quiet)}
-.sw{display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:4px}
-.sw-new{background:var(--tint);border:2px solid var(--new)}.sw-mis{border:1.5px solid var(--blue)}.sw-mut{border:1px solid var(--line)}
-.test{margin-top:20px;background:var(--card);border:1px dashed #9AA8B6;border-radius:12px;padding:14px 18px}
-.test summary{cursor:pointer;font-weight:600;color:var(--blue)}
-.test li{margin:8px 0}
-.testlinks{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
-.testlinks a,.btn{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border-radius:8px;border:1px solid var(--blue2);text-decoration:none;font-weight:500}
-code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:12.5px}
-.band{background:var(--blue);color:#fff;padding:26px 32px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;border-radius:0 0 16px 16px}
-.band-l{max-width:680px}
-.crumb{font-size:13px;color:#BFDCF2;margin-bottom:8px}
-.crumb .lnk{color:#fff}
-.band h1{color:#fff}
-.obj{margin:8px 0 12px;color:#E4F0FA;font-size:15px}
+.fhead{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.crumb{margin:0 0 6px;font-size:13px;color:var(--quiet)}
+.lnk{background:none;border:0;padding:0;color:var(--blue2);text-decoration:underline;cursor:pointer;font-size:inherit}
 .pills{display:flex;gap:8px;flex-wrap:wrap}
-.chain{display:flex;align-items:center;flex-wrap:wrap;gap:6px;align-self:flex-start}
-.chain .sep{color:#7FAFD3}
-.step{font-size:12.5px;padding:7px 11px;border-radius:8px;border:1px solid #3D77A3;color:#E4F0FA;text-decoration:none}
-button.step{background:none;font:inherit;font-size:12.5px;cursor:pointer}
-button.step:hover{background:#1F6497;color:#fff}
-.step.on{background:#fff;color:var(--blue);font-weight:600;border-color:#fff}
-.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:20px 24px 0}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:4px}
-.kpi span{font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--quiet)}
-.kpi b{font-size:14.5px;font-weight:600}
-.turtle{display:grid;grid-template-columns:minmax(0,1fr) 36px minmax(0,1.25fr) 36px minmax(0,1fr);grid-template-areas:"conque . dec . quien" "in ar1 core ar2 out" "como . sop . ind";gap:16px 0;padding:18px 24px 0;align-items:start}
-.a-core,.a-in,.a-out,.arr{align-self:stretch}
-.a-conque{grid-area:conque}.a-dec{grid-area:dec}.a-quien{grid-area:quien}.a-in{grid-area:in}.a-ar1{grid-area:ar1}.a-core{grid-area:core}.a-ar2{grid-area:ar2}.a-out{grid-area:out}.a-como{grid-area:como}.a-sop{grid-area:sop}.a-ind{grid-area:ind}
+.pill{display:inline-flex;align-items:center;min-height:26px;padding:2px 12px;border-radius:13px;font-size:12.5px;font-weight:500;background:#fff;color:var(--ink);border:1px solid #C9D3DE}
+.turtle{display:grid;grid-template-columns:minmax(0,1fr) 36px minmax(0,1.25fr) 36px minmax(0,1fr);grid-template-areas:"conque . dec . quien" "in ar1 core ar2 out" "como . inter . ind";gap:18px 0;align-items:start}
+.a-conque{grid-area:conque}.a-dec{grid-area:dec}.a-quien{grid-area:quien}.a-in{grid-area:in}.a-ar1{grid-area:ar1}.a-core{grid-area:core}.a-ar2{grid-area:ar2}.a-out{grid-area:out}.a-como{grid-area:como}.a-inter{grid-area:inter}.a-ind{grid-area:ind}
+.a-in,.a-out,.a-core,.arr{align-self:stretch}
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .card.soft{background:#F9FBFD}
 .lbl{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:#0B5A94}
 .arr{display:flex;align-items:center;justify-content:center;color:#7C8B9C}
-.core{background:var(--blue);color:#fff;border-radius:20px;padding:22px 24px;display:flex;flex-direction:column;gap:8px}
-.core h2{margin:0 0 6px;font-size:21px;font-weight:600;line-height:1.25}
+.core{background:var(--blue);color:#fff;border-radius:20px;padding:24px 26px;display:flex;flex-direction:column;gap:10px;justify-content:center}
+.core h2{margin:0;font-size:21px;font-weight:600;line-height:1.25}
 .core-k{font-size:11.5px;font-weight:600;letter-spacing:.08em;color:#BFDCF2}
-.core ol{margin:0;padding-left:20px;color:#E4F0FA;font-size:14px}
-.core li{margin:3px 0}
+.core-obj{margin:0;color:#E4F0FA;font-size:14.5px}
+.core-io{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding-top:12px;border-top:1px solid #3D77A3}
+.core-io p{margin:2px 0 0;font-size:13.5px}
 .io{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-top:1px solid #EDF1F5}
 .io b{font-size:14px;font-weight:600}.io span{font-size:12.5px;color:var(--quiet)}
 .dec{display:flex;flex-direction:column;gap:2px}
@@ -83,16 +54,21 @@ button.step:hover{background:#1F6497;color:#fff}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
 .chip{display:inline-flex;align-items:center;min-height:26px;padding:2px 10px;border-radius:13px;font-size:12.5px;font-weight:500;background:var(--tint);color:var(--blue)}
 .chip.ghost{background:#fff;color:var(--ink);border:1px solid #C9D3DE}
+.roles{margin:0;font-size:13px;color:var(--quiet)}
 .ph{margin:0;font-size:13px;color:var(--quiet);font-style:italic}
-.doc{display:grid;grid-template-columns:92px minmax(0,1fr) auto;grid-template-areas:"t n b" "t l b";column-gap:10px;align-items:center;padding:7px 0;border-top:1px solid #EDF1F5}
-.doc .tipo{grid-area:t;font-size:10.5px;font-weight:600;letter-spacing:.05em;color:var(--quiet);text-transform:uppercase}
-.doc .dn{grid-area:n;font-size:13.5px}
-.doc .link-pend{grid-area:l;font-size:11.5px;color:#8A96A3}
-.doc .badge{grid-area:b}
+.sublbl{margin:4px 0 0;font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--quiet)}
+.subs{margin:0;padding-left:20px;font-size:13.5px}.subs li{margin:2px 0}
+.doc{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:10px;row-gap:1px;align-items:center;padding:7px 0;border-top:1px solid #EDF1F5}
+.doc .tipo{grid-column:1/-1}
+.doc .tipo{font-size:10.5px;font-weight:600;letter-spacing:.05em;color:var(--quiet);text-transform:uppercase}
+.doc .dn{font-size:13.5px}
 .badge{display:inline-flex;align-items:center;min-height:22px;padding:1px 8px;border-radius:11px;font-size:11px;font-weight:600;white-space:nowrap}
 .b-ok{background:var(--okbg);color:var(--ok)}.b-wip{background:var(--wipbg);color:var(--wip)}.b-tbc{background:var(--tbcbg);color:var(--tbc)}
-.foot{padding:20px 24px 0;margin:0}
-.pendbox{margin:48px 24px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:32px}
+.kv{display:flex;flex-direction:column;gap:1px;padding:6px 0;border-top:1px solid #EDF1F5}
+.kv b{font-size:13.5px;font-weight:600}.kv span{font-size:11.5px;color:var(--quiet)}
+.risk{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-top:1px solid #EDF1F5;font-size:13.5px}
+.score{flex:none;display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:24px;border-radius:12px;background:var(--wipbg);color:var(--wip);font-size:12px;font-weight:700}
+.foot{margin:22px 0 0}
 @media (max-width:980px){
  .row4{grid-template-columns:repeat(2,minmax(0,1fr))}
  .row3{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -100,286 +76,594 @@ button.step:hover{background:#1F6497;color:#fff}
  .marr{transform:rotate(90deg);height:28px}
  .mapwrap{grid-template-columns:1fr}
  .side{display:none}
- .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
- .turtle{grid-template-columns:1fr;grid-template-areas:"core" "in" "out" "dec" "conque" "quien" "como" "sop" "ind";gap:14px}
+ .turtle{grid-template-columns:1fr;grid-template-areas:"core" "in" "out" "dec" "conque" "quien" "como" "inter" "ind";gap:14px}
  .arr{display:none}
 }
 @media (max-width:560px){
- .row4,.row3,.kpis{grid-template-columns:1fr}
- #mapa{padding:20px 16px}
- .band{padding:20px 16px}
- .turtle,.kpis{padding-left:16px;padding-right:16px}
- .doc{grid-template-columns:1fr auto;grid-template-areas:"t b" "n n" "l l"}
+ .row4,.row3{grid-template-columns:1fr}
+ .page{padding:20px 16px}
+ .core-io{grid-template-columns:1fr}
 }
-button.mbox{font:inherit;font-size:13.5px;cursor:pointer;width:100%}
-button.mbox.mis{font-size:14px}
-button.lnk{background:none;border:0;padding:0;font:inherit;color:var(--blue2);text-decoration:underline;cursor:pointer}
-button.btn{background:#fff;color:var(--blue2);font:inherit;cursor:pointer}
 </style>
 </head>
 <body>
 
-<section class="page" id="p1" aria-label="Identificación y Desarrollo de Oportunidades">
-  <header class="band">
-    <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso misional 1 de 6</span></nav>
-      <h1>Identificación y Desarrollo de Oportunidades</h1>
-      <p class="obj">Todo el proceso comercial: encontrar, desarrollar y calificar oportunidades.</p>
-      <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
-    </div>
-    <nav class="chain" aria-label="Cadena de valor"><span class="step on" aria-current="page">1 · Oportunidades</span><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p2')">2 · Diseño</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p3')">3 · Entrega</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p4')">4 · Operación</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('ren')">5 · Renovaciones</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p5')">6 · Experiencia</button></nav>
-  </header>
-  <div class="kpis">
-    <div class="kpi"><span>INICIA CON</span><b>Plan de cuenta, campaña o necesidad del cliente</b></div>
-    <div class="kpi"><span>TERMINA CON</span><b>Oportunidad calificada que pasa a Preventa, o descartada</b></div>
-    <div class="kpi"><span>ÁREAS QUE PARTICIPAN</span><b>1</b></div>
-    <div class="kpi"><span>DOCUMENTOS</span><b>6</b></div>
-  </div>
-  <div class="turtle">
-    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">Salesforce</span></div><p class="ph">[Herramientas e infraestructura por validar]</p></div>
-    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿La oportunidad está calificada?</b><span>Sí → Preventa · No → se descarta</span></div></div>
-    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas</div><div class="chips"><span class="chip">Ventas</span></div><p class="ph">[Roles por validar con las matrices de roles]</p></div>
-    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Necesidad, solicitud o RFP</b><span>de Cliente</span></div><div class="io"><b>Leads de campañas y eventos</b><span>de Marketing y Comunicación</span></div><div class="io"><b>Estado de la cartera</b><span>de Gestión Financiera</span></div></div>
-    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="core a-core">
-      <span class="core-k">PROCESO</span>
-      <h2>Identificación y Desarrollo de Oportunidades</h2>
-      <span class="core-k">SUBPROCESOS</span>
-      <ol><li>Búsqueda de clientes nuevos</li><li>Mantenimiento de clientes activos</li><li>Calificación de oportunidades (Go/No-Go)</li></ol>
-    </div>
-    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Oportunidad calificada (Go) en Salesforce</b><span>a Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Pipeline y forecast</b><span>a Gestión Financiera</span></div></div>
-    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · documentos</div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Gestión de oportunidades</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Mantenimiento del CRM</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Reporte Go / No-Go</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Plantilla de plan de cuenta</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Instructivo</span><span class="dn">Guía de usuario de Salesforce</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Guía</span><span class="dn">Transferencia de cuentas</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div></div>
-    <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><span class="chip ghost">Marketing y Comunicación</span><span class="chip ghost">Gestión Financiera</span></div></div>
-    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
-  </div>
-  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
-</section>
-<section class="page" id="p2" aria-label="Diseño y Arquitectura de Soluciones">
-  <header class="band">
-    <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso misional 2 de 6</span></nav>
-      <h1>Diseño y Arquitectura de Soluciones</h1>
-      <p class="obj">Desarrollar la propuesta (solución, costeo, BOM, Delivery Assurance) y negociarla hasta el cierre.</p>
-      <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
-    </div>
-    <nav class="chain" aria-label="Cadena de valor"><button type="button" class="step" onclick="go('p1')">1 · Oportunidades</button><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">2 · Diseño</span><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p3')">3 · Entrega</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p4')">4 · Operación</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('ren')">5 · Renovaciones</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p5')">6 · Experiencia</button></nav>
-  </header>
-  <div class="kpis">
-    <div class="kpi"><span>INICIA CON</span><b>Oportunidad calificada, o renovación</b></div>
-    <div class="kpi"><span>TERMINA CON</span><b>Oportunidad ganada o perdida</b></div>
-    <div class="kpi"><span>ÁREAS QUE PARTICIPAN</span><b>6</b></div>
-    <div class="kpi"><span>DOCUMENTOS</span><b>9</b></div>
-  </div>
-  <div class="turtle">
-    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">Salesforce</span><span class="chip ghost">Direct</span><span class="chip ghost">Vanilla</span></div><p class="ph">[Herramientas e infraestructura por validar]</p></div>
-    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿Se ganó la oportunidad?</b><span>Sí → booking · No → se registra como perdida</span></div></div>
-    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas</div><div class="chips"><span class="chip">Preventa</span><span class="chip">Ventas</span><span class="chip">CAO</span><span class="chip">Compras</span><span class="chip">Finanzas</span><span class="chip">Legal</span></div><p class="ph">[Roles por validar con las matrices de roles]</p></div>
-    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Oportunidad calificada</b><span>de Identificación de Oportunidades</span></div><div class="io"><b>Renovaciones con o sin cambios</b><span>de Gestión de Renovaciones</span></div><div class="io"><b>Cotizaciones de proveedores</b><span>de Compras y Proveedores</span></div><div class="io"><b>Crédito y alta de cliente</b><span>de Gestión Financiera</span></div><div class="io"><b>Revisión de términos</b><span>de Legal y Cumplimiento</span></div><div class="io"><b>Matriz de autorizaciones</b><span>de Gobierno Corporativo</span></div></div>
-    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="core a-core">
-      <span class="core-k">PROCESO</span>
-      <h2>Diseño y Arquitectura de Soluciones</h2>
-      <span class="core-k">SUBPROCESOS</span>
-      <ol><li>Diseño de la solución</li><li>Costeo y BOM</li><li>Delivery Assurance</li><li>Elaboración y aprobación de la propuesta</li><li>Negociación y cierre</li></ol>
-    </div>
-    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Paquete de booking y hand off a PMO</b><span>a Entrega e Implementación</span></div><div class="io"><b>Propuesta, quote y pSOW</b><span>a Cliente</span></div><div class="io"><b>Solicitud de cotización</b><span>a Compras y Proveedores</span></div><div class="io"><b>Solicitud de alta y crédito</b><span>a Gestión Financiera</span></div><div class="io"><b>Motivo de inviabilidad</b><span>a Identificación de Oportunidades</span></div></div>
-    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · documentos</div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Procedimiento macro de Preventa</span><span class="badge b-wip">En construcción</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Sizing</span><span class="badge b-wip">En construcción</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Generar propuesta</span><span class="badge b-wip">En construcción</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Delivery Assurance</span><span class="badge b-wip">En construcción</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Tower Model de costeo</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Bid Management</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Plantilla</span><span class="dn">SOW básico</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Guía</span><span class="dn">Matriz de autorizaciones</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Revisión ganada / perdida</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div></div>
-    <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><span class="chip ghost">Compras y Proveedores</span><span class="chip ghost">Gestión Financiera</span><span class="chip ghost">Legal y Cumplimiento</span><span class="chip ghost">Gestión Logística</span></div></div>
-    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
-  </div>
-  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
-</section>
-<section class="page" id="p3" aria-label="Entrega e Implementación de Servicios">
-  <header class="band">
-    <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso misional 3 de 6</span></nav>
-      <h1>Entrega e Implementación de Servicios</h1>
-      <p class="obj">Registrar la venta y entregar lo vendido; el booking es su puerta de entrada.</p>
-      <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
-    </div>
-    <nav class="chain" aria-label="Cadena de valor"><button type="button" class="step" onclick="go('p1')">1 · Oportunidades</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p2')">2 · Diseño</button><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">3 · Entrega</span><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p4')">4 · Operación</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('ren')">5 · Renovaciones</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p5')">6 · Experiencia</button></nav>
-  </header>
-  <div class="kpis">
-    <div class="kpi"><span>INICIA CON</span><b>Oportunidad ganada</b></div>
-    <div class="kpi"><span>TERMINA CON</span><b>Entrega aceptada por el cliente; pasa a post venta si aplica</b></div>
-    <div class="kpi"><span>ÁREAS QUE PARTICIPAN</span><b>5</b></div>
-    <div class="kpi"><span>DOCUMENTOS</span><b>7</b></div>
-  </div>
-  <div class="turtle">
-    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">SAP</span><span class="chip ghost">Direct</span><span class="chip ghost">Checklist (Power App)</span><span class="chip ghost">Vanilla</span><span class="chip ghost">MX Procurement</span></div><p class="ph">[Herramientas e infraestructura por validar]</p></div>
-    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿Requiere gestión de ingeniería?</b><span>Sí → PMO · No → Compras y Logística</span></div><div class="dec"><b>¿Incluye servicio post venta?</b><span>Sí → Operación · No → termina</span></div></div>
-    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas</div><div class="chips"><span class="chip">Sales Support / SOA</span><span class="chip">PMO</span><span class="chip">Compras</span><span class="chip">Logística</span><span class="chip">Legal</span></div><p class="ph">[Roles por validar con las matrices de roles]</p></div>
-    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Paquete de booking y hand off</b><span>de Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Orden de compra (NTTPO)</b><span>de Compras y Proveedores</span></div><div class="io"><b>Liberación por crédito</b><span>de Gestión Financiera</span></div><div class="io"><b>Contrato firmado</b><span>de Legal y Cumplimiento</span></div><div class="io"><b>Personal, activos y viáticos</b><span>de Talento · TI · Servicios Generales</span></div></div>
-    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="core a-core">
-      <span class="core-k">PROCESO</span>
-      <h2>Entrega e Implementación de Servicios</h2>
-      <span class="core-k">SUBPROCESOS</span>
-      <ol><li>Booking</li><li>Con ingeniería: PMO</li><li>Sin ingeniería: Compras y Logística</li><li>Cierre y aceptación</li></ol>
-    </div>
-    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Servicio listo para operar</b><span>a Operación y Monitoreo</span></div><div class="io"><b>Hand off al CSM</b><span>a Experiencia del Cliente</span></div><div class="io"><b>Sales order, avance e ingresos</b><span>a Gestión Financiera</span></div><div class="io"><b>Requisición de orden de compra</b><span>a Compras y Proveedores</span></div><div class="io"><b>Entregables y acta de aceptación</b><span>a Cliente</span></div></div>
-    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · documentos</div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Sales Support</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Gestión de proyectos (PMO)</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Logística</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Instructivo</span><span class="dn">Procesamiento de órdenes de compra</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Instructivo</span><span class="dn">Sales Order Administration</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Instructivo</span><span class="dn">Crear contrato en SAP</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Instructivo</span><span class="dn">Validación de booking</span><span class="badge b-tbc">Por confirmar</span><span class="link-pend">liga pendiente</span></div></div>
-    <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><span class="chip ghost">Compras y Proveedores</span><span class="chip ghost">Gestión Logística</span><span class="chip ghost">Gestión Financiera</span><span class="chip ghost">Legal y Cumplimiento</span><span class="chip ghost">Contratos de Servicios</span></div></div>
-    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
-  </div>
-  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
-</section>
-<section class="page" id="p4" aria-label="Operación y Monitoreo de Servicios Gestionados">
-  <header class="band">
-    <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso misional 4 de 6</span></nav>
-      <h1>Operación y Monitoreo de Servicios Gestionados</h1>
-      <p class="obj">Operar los servicios post venta contratados y disparar su facturación recurrente.</p>
-      <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
-    </div>
-    <nav class="chain" aria-label="Cadena de valor"><button type="button" class="step" onclick="go('p1')">1 · Oportunidades</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p2')">2 · Diseño</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p3')">3 · Entrega</button><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">4 · Operación</span><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('ren')">5 · Renovaciones</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p5')">6 · Experiencia</button></nav>
-  </header>
-  <div class="kpis">
-    <div class="kpi"><span>INICIA CON</span><b>Transición a operación de un servicio</b></div>
-    <div class="kpi"><span>TERMINA CON</span><b>Fin de la vigencia del servicio</b></div>
-    <div class="kpi"><span>ÁREAS QUE PARTICIPAN</span><b>2</b></div>
-    <div class="kpi"><span>DOCUMENTOS</span><b>2</b></div>
-  </div>
-  <div class="turtle">
-    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">ServiceNow</span></div><p class="ph">[Herramientas e infraestructura por validar]</p></div>
-    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><p class="ph">Sin decisiones de alto nivel definidas.</p></div>
-    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas</div><div class="chips"><span class="chip">SDM</span><span class="chip">SOC / NOC</span></div><p class="ph">[Roles por validar con las matrices de roles]</p></div>
-    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Servicio listo para operar</b><span>de Entrega e Implementación</span></div><div class="io"><b>Lista semanal de órdenes nuevas</b><span>de Sales Support</span></div></div>
-    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="core a-core">
-      <span class="core-k">PROCESO</span>
-      <h2>Operación y Monitoreo de Servicios Gestionados</h2>
-      <span class="core-k">SUBPROCESOS</span>
-      <ol><li>Gestión de niveles de servicio</li><li>Monitoreo</li><li>Confirmación para facturación recurrente</li></ol>
-    </div>
-    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Confirmación para facturación recurrente</b><span>a Gestión Financiera</span></div><div class="io"><b>Servicio operado y seguimiento de SLA</b><span>a Cliente</span></div><div class="io"><b>Escalamientos de SLA</b><span>a Experiencia del Cliente</span></div></div>
-    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · documentos</div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Gestión de niveles de servicio (SLA)</span><span class="badge b-ok">Vigente</span><span class="link-pend">liga pendiente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Gestión de facturación de servicios</span><span class="badge b-tbc">Por confirmar</span><span class="link-pend">liga pendiente</span></div></div>
-    <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><span class="chip ghost">Gestión Financiera</span></div></div>
-    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
-  </div>
-  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
-</section>
-<section class="page" id="p5" aria-label="Gestión de la Experiencia del Cliente">
-  <header class="band">
-    <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso misional 6 de 6</span></nav>
-      <h1>Gestión de la Experiencia del Cliente</h1>
-      <p class="obj">Medir la satisfacción y cuidar la relación con el cliente.</p>
-      <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
-    </div>
-    <nav class="chain" aria-label="Cadena de valor"><button type="button" class="step" onclick="go('p1')">1 · Oportunidades</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p2')">2 · Diseño</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p3')">3 · Entrega</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p4')">4 · Operación</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('ren')">5 · Renovaciones</button><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">6 · Experiencia</span></nav>
-  </header>
-  <div class="kpis">
-    <div class="kpi"><span>INICIA CON</span><b>Cliente activo</b></div>
-    <div class="kpi"><span>TERMINA CON</span><b>Proceso continuo durante la relación</b></div>
-    <div class="kpi"><span>ÁREAS QUE PARTICIPAN</span><b>2</b></div>
-    <div class="kpi"><span>DOCUMENTOS</span><b>1</b></div>
-  </div>
-  <div class="turtle">
-    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">ServiceNow</span><span class="chip ghost">Power BI</span></div><p class="ph">[Herramientas e infraestructura por validar]</p></div>
-    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><p class="ph">Sin decisiones de alto nivel definidas.</p></div>
-    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas</div><div class="chips"><span class="chip">CX</span><span class="chip">CSM</span></div><p class="ph">[Roles por validar con las matrices de roles]</p></div>
-    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Hand off al cierre del proyecto</b><span>de Entrega e Implementación</span></div><div class="io"><b>Welcome kit y SLA</b><span>de Contratos de Servicios</span></div><div class="io"><b>Tickets en ServiceNow</b><span>de Tecnologías de la Información</span></div><div class="io"><b>Dashboard de renovaciones</b><span>de Gestión de Renovaciones</span></div><div class="io"><b>Escalamientos de SLA</b><span>de Operación y Monitoreo</span></div></div>
-    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="core a-core">
-      <span class="core-k">PROCESO</span>
-      <h2>Gestión de la Experiencia del Cliente</h2>
-      <span class="core-k">SUBPROCESOS</span>
-      <ol><li>Medición de satisfacción (NPS, CSAT)</li><li>Revisiones de cuenta (QBR)</li><li>Atención de solicitudes y expectativas</li></ol>
-    </div>
-    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>QBR, encuestas y cartas de satisfacción</b><span>a Cliente</span></div><div class="io"><b>Plan de acción</b><span>a Áreas de NTT DATA</span></div><div class="io"><b>Información de la cuenta (por validar)</b><span>a Gestión de Renovaciones</span></div></div>
-    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · documentos</div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Gestión de solicitudes, expectativas y experiencia</span><span class="badge b-tbc">Por confirmar</span><span class="link-pend">liga pendiente</span></div></div>
-    <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><span class="chip ghost">Contratos de Servicios</span><span class="chip ghost">Tecnologías de la Información</span></div></div>
-    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
-  </div>
-  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
-</section>
-<section class="page" id="ren" aria-label="Gestión de Renovaciones">
-  <header class="band">
-    <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso misional 5 de 6</span></nav>
-      <h1>Gestión de Renovaciones</h1>
-      <p class="obj">Renovar o ampliar servicios, licenciamiento y contratos antes de su vencimiento.</p>
-      <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
-    </div>
-    <nav class="chain" aria-label="Cadena de valor"><button type="button" class="step" onclick="go('p1')">1 · Oportunidades</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p2')">2 · Diseño</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p3')">3 · Entrega</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p4')">4 · Operación</button><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">5 · Renovaciones</span><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p5')">6 · Experiencia</button></nav>
-  </header>
-  <div class="kpis">
-    <div class="kpi"><span>INICIA CON</span><b>Monitoreo de vencimientos en SAP; la gestión inicia 90 días antes</b></div>
-    <div class="kpi"><span>TERMINA CON</span><b>Renovación enviada a Diseño, o terminación</b></div>
-    <div class="kpi"><span>ÁREAS QUE PARTICIPAN</span><b>2</b></div>
-    <div class="kpi"><span>DOCUMENTOS</span><b>1</b></div>
-  </div>
-  <div class="turtle">
-    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">SAP</span><span class="chip ghost">Power BI</span></div><p class="ph">[Herramientas e infraestructura por validar]</p></div>
-    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿Se renueva?</b><span>Sí → siguiente decisión · No → terminación</span></div><div class="dec"><b>¿Trae crecimiento o refresh?</b><span>Sí → Preventa · No → negociación y booking</span></div></div>
-    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas</div><div class="chips"><span class="chip">Renovaciones</span><span class="chip">CSM</span></div><p class="ph">[Roles por validar con las matrices de roles]</p></div>
-    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Seriales bajo servicio y vencimientos</b><span>de SAP</span></div><div class="io"><b>Información de la cuenta (por validar)</b><span>de Experiencia del Cliente</span></div></div>
-    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="core a-core">
-      <span class="core-k">PROCESO</span>
-      <h2>Gestión de Renovaciones</h2>
-      <span class="core-k">SUBPROCESOS</span>
-      <ol><li>Monitoreo de vencimientos</li><li>Renovación sin cambios</li><li>Renovación con crecimiento o refresh</li></ol>
-    </div>
-    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
-    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Renovación con o sin cambios</b><span>a Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Propuesta de renovación</b><span>a Cliente</span></div><div class="io"><b>Dashboard de renovaciones</b><span>a Experiencia del Cliente</span></div></div>
-    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · documentos</div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Renovaciones (versión 2023)</span><span class="badge b-tbc">Por confirmar</span><span class="link-pend">liga pendiente</span></div></div>
-    <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><p class="ph">Por precisar.</p></div></div>
-    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
-  </div>
-  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
-</section>
-<section class="page" id="pendiente" aria-label="Ficha en construcción">
-  <div class="pendbox">
-    <p class="eyebrow">FICHA EN CONSTRUCCIÓN</p>
-    <h1>Esta ficha se integrará en una siguiente etapa</h1>
-    <p class="lead">En esta prueba solo están disponibles los seis procesos de la cadena de valor. Los demás procesos se agregarán con la información de las presentaciones de onboarding de cada área.</p>
-    <p><button type="button" class="btn" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
-  </div>
-</section>
-<section class="page on" id="mapa" aria-label="Mapa de procesos">
-  <header class="mhead">
-    <div>
-      <h1>Arquitectura de procesos</h1>
-    </div>
-    <span class="pill dark">Prueba técnica · v0.1</span>
-  </header>
+<section class="page on" id="mapa" aria-label="Arquitectura de procesos">
+  <header class="mhead"><h1>Arquitectura de procesos</h1></header>
   <div class="mapwrap">
     <div class="side l" aria-hidden="true">NECESIDADES Y EXPECTATIVAS DE LOS STAKEHOLDERS</div>
     <div class="mapcore">
       <p class="band-lbl">01 · PROCESOS ESTRATÉGICOS</p>
-      <div class="row4"><button type="button" class="mbox muted " onclick="go('pendiente')">Planeación y Despliegue de la Estrategia</button><button type="button" class="mbox muted " onclick="go('pendiente')">Innovación y Desarrollo del Portafolio</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión de Alianzas y Ecosistema de Partners</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gobierno Corporativo y Gestión de Riesgos</button></div>
+      <div class="row4"><button type="button" class="mbox " onclick="go('e1')">Planeación y Despliegue de la Estrategia</button><button type="button" class="mbox " onclick="go('e2')">Innovación y Desarrollo del Portafolio</button><button type="button" class="mbox " onclick="go('e3')">Gestión de Alianzas y Ecosistema de Partners</button><button type="button" class="mbox " onclick="go('e4')">Gobierno Corporativo y Gestión de Riesgos</button></div>
       <p class="band-lbl">02 · PROCESOS MISIONALES · MACROPROCESO Q2C</p>
-      <div class="chainrow"><button type="button" class="mbox mis" onclick="go('p1')"><span class="n">1</span>Identificación y Desarrollo de Oportunidades<span class="sub">Ventas</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('p2')"><span class="n">2</span>Diseño y Arquitectura de Soluciones<span class="sub">Preventa · Ventas</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('p3')"><span class="n">3</span>Entrega e Implementación de Servicios<span class="sub">Sales Support / SOA · PMO</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('p4')"><span class="n">4</span>Operación y Monitoreo de Servicios Gestionados<span class="sub">SDM · SOC / NOC</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('ren')"><span class="n">5</span>Gestión de Renovaciones<span class="sub">Renovaciones · CSM</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('p5')"><span class="n">6</span>Gestión de la Experiencia del Cliente<span class="sub">CX · CSM</span></button></div>
+      <div class="chainrow"><button type="button" class="mbox mis" onclick="go('p1')"><span class="n">1</span>Identificación y Desarrollo de Oportunidades<span class="sub">Ventas</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('p2')"><span class="n">2</span>Diseño y Arquitectura de Soluciones<span class="sub">Preventa</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('p3')"><span class="n">3</span>Entrega e Implementación de Servicios<span class="sub">Sales Support / PMO</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('p4')"><span class="n">4</span>Operación y Monitoreo de Servicios Gestionados<span class="sub">Delivery (SDM)</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('ren')"><span class="n">5</span>Gestión de Renovaciones<span class="sub">Área de Renovaciones</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('exp')"><span class="n">6</span>Gestión de la Experiencia del Cliente<span class="sub">Área de Renovaciones · CX y CSM</span></button></div>
       <p class="band-lbl">03 · PROCESOS DE SOPORTE</p>
-      <div class="row3"><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión y Desarrollo del Talento</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión Financiera y Presupuestal</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión de Compras y Proveedores</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión Legal y Cumplimiento</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión Logística</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión de Servicios Generales</button><button type="button" class="mbox muted " onclick="go('pendiente')">Marketing y Comunicación</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión de Contratos de Servicios</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión de Tecnologías de la Información</button></div>
+      <div class="row3"><button type="button" class="mbox " onclick="go('tal')">Gestión y Desarrollo del Talento</button><button type="button" class="mbox " onclick="go('fin')">Gestión Financiera y Presupuestal</button><button type="button" class="mbox " onclick="go('com')">Gestión de Compras y Proveedores</button><button type="button" class="mbox " onclick="go('leg')">Gestión Legal y Cumplimiento</button><button type="button" class="mbox " onclick="go('log')">Gestión Logística</button><button type="button" class="mbox " onclick="go('sg')">Gestión de Servicios Generales</button><button type="button" class="mbox " onclick="go('mkt')">Marketing y Comunicación</button><button type="button" class="mbox " onclick="go('con')">Gestión de Contratos de Servicios</button><button type="button" class="mbox " onclick="go('ti')">Gestión de Tecnologías de la Información</button></div>
       <p class="band-lbl">04 · PROCESOS TRANSVERSALES</p>
-      <button type="button" class="mbox trans" onclick="go('pendiente')">Medición, Análisis y Mejora Continua · Gestión Integrada del SGI (ISO 9001 / 20000-1 / 27001) · Auditorías y Certificaciones</button>
+      <button type="button" class="mbox trans" onclick="go('sgi')">Medición, Análisis y Mejora Continua · Gestión Integrada del SGI (ISO 9001 / 20000-1 / 27001) · Auditorías y Certificaciones</button>
     </div>
     <div class="side r" aria-hidden="true">SATISFACCIÓN Y VALOR ENTREGADO A LOS STAKEHOLDERS</div>
   </div>
-  <details class="test">
-    <summary>Prueba técnica · qué revisar en SharePoint</summary>
-    <ol>
-      <li>La página se ve completa dentro del elemento web <b>Insertar</b>, sin barras de desplazamiento dobles.</li>
-      <li>Al dar clic en un proceso misional se abre su ficha, y «Volver al mapa» regresa.</li>
-      <li>La barra de la cadena dentro de cada ficha salta entre los seis procesos.</li>
-      <li>Las tipografías y colores se ven igual que fuera de SharePoint (si la red bloquea Google Fonts, se usa la letra del sistema).</li>
-      <li>Con la ventana angosta o desde Teams y el celular, las columnas se apilan sin cortar texto.</li>
-      <li>Ligas a documentos: reemplaza la dirección de prueba en el archivo (busca <code>REEMPLAZAR-LIGA-SHAREPOINT</code>) por la de un documento real y prueba las dos formas:
-        <div class="testlinks">
-          <a href="https://REEMPLAZAR-LIGA-SHAREPOINT" target="_blank" rel="noopener">Abrir en pestaña nueva</a>
-          <a href="https://REEMPLAZAR-LIGA-SHAREPOINT" target="_top">Abrir en la misma ventana</a>
-        </div>
-        SharePoint no deja abrir sus documentos dentro de un iframe, así que la que funcione aquí será la que usemos en el visor.</li>
-    </ol>
-  </details>
+</section>
+<section class="page" id="p1" aria-label="Identificación y Desarrollo de Oportunidades">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso misional 1 de 6</p>
+      <h1>Identificación y Desarrollo de Oportunidades</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Ventas</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">Salesforce</span><span class="chip ghost">Teams</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿La oportunidad está calificada (Go/No-Go)?</b><span>Sí → Preventa · No → se descarta con motivo</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Ventas</span><span class="chip">Marketing</span></div><p class="roles">Client Manager · Bid Manager · Gerencia comercial</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Necesidad, solicitud o RFP</b><span>de Cliente</span></div><div class="io"><b>Leads de campañas y eventos</b><span>de Marketing y Comunicación</span></div><div class="io"><b>Estado de la cartera</b><span>de Gestión Financiera</span></div><div class="io"><b>Oportunidades de expansión</b><span>de Experiencia del Cliente</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Identificación y Desarrollo de Oportunidades</h2>
+      <p class="core-obj">Todo el proceso comercial: encontrar, desarrollar y calificar oportunidades con clientes nuevos y activos.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Plan de cuenta, campaña o necesidad del cliente</p></div><div><span class="core-k">TERMINA CON</span><p>Oportunidad calificada que pasa a Preventa, o descartada</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Oportunidad calificada (Go) en Salesforce</b><span>a Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Pipeline y forecast</b><span>a Gestión Financiera</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Búsqueda de clientes nuevos</li><li>Mantenimiento de clientes activos</li><li>Calificación de oportunidades (Go/No-Go)</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Gestión de oportunidades</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Mantenimiento del CRM</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Sales engagement (2023)</span><span class="badge b-tbc">Por confirmar</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Reporte Go / No-Go</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Plantilla de plan de cuenta</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Instructivo</span><span class="dn">Guía de usuario de Salesforce</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Guía</span><span class="dn">Transferencia de cuentas</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Guía</span><span class="dn">Reuniones efectivas</span><span class="badge b-ok">Vigente</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Cliente</span><span class="chip ghost">Marketing y Comunicación</span><span class="chip ghost">Gestión Financiera</span><span class="chip ghost">Experiencia del Cliente</span><span class="chip ghost">Diseño y Arquitectura de Soluciones</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><div class="kv"><b>% de leads con información mínima completa</b><span>Fuente: SIPOC Ventas</span></div><div class="kv"><b>% de leads que avanzan a calificación</b><span>Fuente: SIPOC Ventas</span></div><div class="kv"><b>Exactitud del forecast vs. resultado real</b><span>Fuente: SIPOC Ventas</span></div><p class="sublbl">RIESGOS · AMEF Q2C</p><div class="risk"><span>Gestión limitada del riesgo en deals complejos</span><span class="score" title="Puntuación AMEF">49</span></div></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="p2" aria-label="Diseño y Arquitectura de Soluciones">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso misional 2 de 6</p>
+      <h1>Diseño y Arquitectura de Soluciones</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Preventa</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">Salesforce</span><span class="chip ghost">Direct</span><span class="chip ghost">Vanilla</span><span class="chip ghost">Tower Model</span><span class="chip ghost">Bid Management Tool</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿La solicitud es viable?</b><span>No → motivo de inviabilidad a Ventas</span></div><div class="dec"><b>¿Se ganó la oportunidad?</b><span>Sí → booking · No → se registra como perdida</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Preventa</span><span class="chip">Ventas</span><span class="chip">CAO</span><span class="chip">Delivery Assurance</span></div><p class="roles">Solution Architect · Especialista · Service Architect · Client Manager · Bid Manager · Líder de Delivery Assurance</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Oportunidad calificada</b><span>de Identificación de Oportunidades</span></div><div class="io"><b>Renovación con o sin cambios</b><span>de Gestión de Renovaciones</span></div><div class="io"><b>Cotizaciones de proveedores</b><span>de Compras y Proveedores</span></div><div class="io"><b>Crédito y alta de cliente</b><span>de Gestión Financiera</span></div><div class="io"><b>Revisión de términos y redlines</b><span>de Legal y Cumplimiento</span></div><div class="io"><b>Matriz de autorizaciones</b><span>de Gobierno Corporativo</span></div><div class="io"><b>Portafolio y arquitecturas de referencia</b><span>de Innovación y Desarrollo del Portafolio</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Diseño y Arquitectura de Soluciones</h2>
+      <p class="core-obj">Desarrollar la propuesta (solución, costeo, BOM y Delivery Assurance) y negociarla hasta el cierre.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Oportunidad calificada o renovación</p></div><div><span class="core-k">TERMINA CON</span><p>Oportunidad ganada o perdida</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Paquete de booking y hand off a PMO</b><span>a Entrega e Implementación</span></div><div class="io"><b>Propuesta, quote y pSOW</b><span>a Cliente</span></div><div class="io"><b>Solicitud de cotización</b><span>a Compras y Proveedores</span></div><div class="io"><b>Solicitud de alta de cliente y crédito</b><span>a Gestión Financiera</span></div><div class="io"><b>Motivo de inviabilidad</b><span>a Identificación de Oportunidades</span></div><div class="io"><b>Revisión ganada / perdida</b><span>a Gobierno Corporativo</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Diseño de la solución</li><li>Costeo y BOM</li><li>Delivery Assurance</li><li>Elaboración y aprobación de la propuesta</li><li>Negociación y cierre</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Procedimiento macro de Preventa</span><span class="badge b-wip">En construcción</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Sizing</span><span class="badge b-wip">En construcción</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Generar propuesta</span><span class="badge b-wip">En construcción</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Delivery Assurance</span><span class="badge b-wip">En construcción</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Tower Model de costeo</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Bid Management</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Aprobación de fondeo de la oportunidad</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Plantilla</span><span class="dn">SOW básico</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Guía</span><span class="dn">Participantes en una propuesta</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Revisión ganada / perdida</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Política</span><span class="dn">Tipo de cambio para pricing (borrador)</span><span class="badge b-wip">En construcción</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Identificación de Oportunidades</span><span class="chip ghost">Gestión de Renovaciones</span><span class="chip ghost">Compras y Proveedores</span><span class="chip ghost">Gestión Financiera</span><span class="chip ghost">Legal y Cumplimiento</span><span class="chip ghost">Gobierno Corporativo</span><span class="chip ghost">Innovación y Desarrollo del Portafolio</span><span class="chip ghost">Entrega e Implementación</span><span class="chip ghost">Cliente</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><div class="kv"><b>% de propuestas entregadas dentro del OLA</b><span>Fuente: SIPOC Ventas</span></div><div class="kv"><b>Tasa de win / loss</b><span>Fuente: SIPOC Ventas</span></div><div class="kv"><b>Proyectos con servicios sin evidencia de Delivery Assurance (meta 0)</b><span>Fuente: Generar propuesta</span></div><div class="kv"><b>Proyectos con servicios sin pSOW (meta 0)</b><span>Fuente: Procedimiento macro de Preventa</span></div><p class="sublbl">RIESGOS · AMEF Q2C</p><div class="risk"><span>SOW no estandarizado o entregas sin SOW</span><span class="score" title="Puntuación AMEF">54</span></div><div class="risk"><span>Falta de Delivery Assurance formal</span><span class="score" title="Puntuación AMEF">52</span></div><div class="risk"><span>Variabilidad en procesos de aprobación</span><span class="score" title="Puntuación AMEF">51</span></div><div class="risk"><span>Desalineación entre costos reales y rates</span><span class="score" title="Puntuación AMEF">49</span></div></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="p3" aria-label="Entrega e Implementación de Servicios">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso misional 3 de 6</p>
+      <h1>Entrega e Implementación de Servicios</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Sales Support / PMO</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">SAP</span><span class="chip ghost">Direct</span><span class="chip ghost">Checklist (Power App)</span><span class="chip ghost">Vanilla</span><span class="chip ghost">MX Procurement</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿Requiere gestión de ingeniería?</b><span>Sí → PMO · No → Compras y Logística</span></div><div class="dec"><b>¿Incluye servicio post venta?</b><span>Sí → Operación · No → termina</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Sales Support / SOA</span><span class="chip">PMO</span><span class="chip">Compras</span><span class="chip">Logística</span></div><p class="roles">Sales Support · Sales Order Administrator · Project Admin · PMO Manager · Project Manager</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Paquete de booking y hand off</b><span>de Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Orden de compra (NTTPO)</b><span>de Compras y Proveedores</span></div><div class="io"><b>Liberación por crédito</b><span>de Gestión Financiera</span></div><div class="io"><b>Contrato firmado</b><span>de Legal y Cumplimiento</span></div><div class="io"><b>Personal, equipo y viáticos</b><span>de Talento · TI · Servicios Generales</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Entrega e Implementación de Servicios</h2>
+      <p class="core-obj">Registrar la venta y entregar lo vendido; el booking es su puerta de entrada.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Oportunidad ganada</p></div><div><span class="core-k">TERMINA CON</span><p>Entrega aceptada por el cliente; pasa a operación si hay post venta</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Servicio listo para operar</b><span>a Operación y Monitoreo</span></div><div class="io"><b>Hand off al cierre del proyecto</b><span>a Experiencia del Cliente</span></div><div class="io"><b>Sales order, avance e ingresos</b><span>a Gestión Financiera</span></div><div class="io"><b>Requisición de orden de compra</b><span>a Compras y Proveedores</span></div><div class="io"><b>Órdenes de servicio</b><span>a Contratos de Servicios</span></div><div class="io"><b>Solicitud de personal</b><span>a Gestión del Talento</span></div><div class="io"><b>Entregables y acta de aceptación</b><span>a Cliente</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Booking</li><li>Con ingeniería: PMO</li><li>Sin ingeniería: Compras y Logística</li><li>Cierre y aceptación</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Sales Support</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Gestión de proyectos (PMO)</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Instructivo</span><span class="dn">Procesamiento de órdenes de compra</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Instructivo</span><span class="dn">Sales Order Administration</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Instructivo</span><span class="dn">Crear contrato en SAP</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Instructivo</span><span class="dn">Validación de booking</span><span class="badge b-tbc">Por confirmar</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Diseño y Arquitectura de Soluciones</span><span class="chip ghost">Compras y Proveedores</span><span class="chip ghost">Gestión Financiera</span><span class="chip ghost">Legal y Cumplimiento</span><span class="chip ghost">Talento · TI · Servicios Generales</span><span class="chip ghost">Operación y Monitoreo</span><span class="chip ghost">Experiencia del Cliente</span><span class="chip ghost">Contratos de Servicios</span><span class="chip ghost">Gestión del Talento</span><span class="chip ghost">Cliente</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><div class="kv"><b>Revisión inicial del checklist en 1 día</b><span>Fuente: SIPOC Sales Support</span></div><div class="kv"><b>Procesamiento de la orden en SAP en 1 día</b><span>Fuente: SIPOC Sales Support</span></div><div class="kv"><b>% de avance planeado vs. real</b><span>Fuente: SIPOC PMO</span></div><div class="kv"><b>Tiempo entre asignación de PM y hand off</b><span>Fuente: SIPOC PMO</span></div><p class="sublbl">RIESGOS · AMEF Q2C</p><div class="risk"><span>Inconsistencia en datos para booking y facturación</span><span class="score" title="Puntuación AMEF">56</span></div><div class="risk"><span>Checklist comercial manual y desconectado</span><span class="score" title="Puntuación AMEF">51</span></div><div class="risk"><span>Falta de trazabilidad pipeline → delivery → cobranza</span><span class="score" title="Puntuación AMEF">51</span></div><div class="risk"><span>Prebooks y entregas sin orden de compra</span><span class="score" title="Puntuación AMEF">45</span></div></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="p4" aria-label="Operación y Monitoreo de Servicios Gestionados">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso misional 4 de 6</p>
+      <h1>Operación y Monitoreo de Servicios Gestionados</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Delivery (SDM)</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">ServiceNow</span><span class="chip ghost">Zabbix</span><span class="chip ghost">Hermes</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿El SLA está en riesgo?</b><span>Sí → escalamiento estándar en Delivery; el CSM acompaña como abogado del cliente</span></div><div class="dec"><b>¿Se detecta una oportunidad comercial?</b><span>Delivery la registra y la transfiere a Experiencia del Cliente</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Delivery</span><span class="chip">SOC / NOC</span><span class="chip">Service Desk</span></div><p class="roles">Service Delivery Manager · Service Desk · Ingenieros en sitio · Operaciones de Managed Services</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Servicio listo para operar</b><span>de Entrega e Implementación</span></div><div class="io"><b>Lista semanal de órdenes nuevas</b><span>de Sales Support</span></div><div class="io"><b>SLA contratado</b><span>de Contratos de Servicios</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Operación y Monitoreo de Servicios Gestionados</h2>
+      <p class="core-obj">Entregar el servicio contratado conforme a los niveles acordados, gestionando la operación y la atención de eventos.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Transición a operación: habilitación técnica y alta del servicio</p></div><div><span class="core-k">TERMINA CON</span><p>Fin de la vigencia del servicio</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Confirmación para facturación recurrente</b><span>a Gestión Financiera</span></div><div class="io"><b>Servicio operado y revisión de servicio (QSR)</b><span>a Cliente</span></div><div class="io"><b>Datos operativos para Health Score y escalamientos</b><span>a Experiencia del Cliente</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Atención de incidentes y problemas</li><li>Peticiones y cambios</li><li>Niveles de servicio (SLA) y QSR</li><li>Monitoreo (SOC / NOC)</li><li>Administración de servicios administrados</li><li>Confirmación para facturación recurrente</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Gestión de niveles de servicio (SLA)</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Gestión de facturación de servicios</span><span class="badge b-tbc">Por confirmar</span></div><div class="doc"><span class="tipo">Guía</span><span class="dn">Delivery vs. Sales / Customer Success: definición de roles</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Guía</span><span class="dn">Modelo organizacional de Customer Success (propuesta)</span><span class="badge b-tbc">Por confirmar</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Entrega e Implementación</span><span class="chip ghost">Sales Support</span><span class="chip ghost">Contratos de Servicios</span><span class="chip ghost">Gestión Financiera</span><span class="chip ghost">Cliente</span><span class="chip ghost">Experiencia del Cliente</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><div class="kv"><b>Cumplimiento de SLA</b><span>Fuente: Definición de roles Delivery</span></div><div class="kv"><b>Disponibilidad</b><span>Fuente: Definición de roles Delivery</span></div><div class="kv"><b>MTTR</b><span>Fuente: Definición de roles Delivery</span></div><div class="kv"><b>Backlog y antigüedad</b><span>Fuente: Modelo organizacional CS</span></div><div class="kv"><b>Reincidencia</b><span>Fuente: Modelo organizacional CS</span></div><div class="kv"><b>Satisfacción con la atención</b><span>Fuente: Modelo organizacional CS</span></div><p class="sublbl">RIESGOS · AMEF Q2C</p><p class="ph">[Sin riesgos identificados en el AMEF; por levantar]</p></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="ren" aria-label="Gestión de Renovaciones">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso misional 5 de 6</p>
+      <h1>Gestión de Renovaciones</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Área de Renovaciones</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">SAP</span><span class="chip ghost">Power BI (dashboard de renovaciones)</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿Se renueva?</b><span>Sí → siguiente decisión · No → terminación</span></div><div class="dec"><b>¿Trae crecimiento, servicios nuevos o refresh?</b><span>Sí → Preventa · No → negociación y booking</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Renovaciones</span><span class="chip">Base de datos de renovaciones</span><span class="chip">CSM</span><span class="chip">Gestión de Contratos de Servicios</span><span class="chip">Ventas</span></div><p class="roles">Especialista de renovaciones · Base de datos de renovaciones · CSM (facilita la renovación) · Ventas (aprueba)</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Seriales bajo servicio y fechas de vencimiento</b><span>de SAP</span></div><div class="io"><b>Riesgo de no renovación y salud de la cuenta</b><span>de Experiencia del Cliente (CSM)</span></div><div class="io"><b>Fechas de vencimiento de contratos (por validar)</b><span>de Gestión de Contratos de Servicios</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gestión de Renovaciones</h2>
+      <p class="core-obj">Renovar o ampliar servicios, licenciamiento y contratos antes de su vencimiento, sin erosión de precio.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Monitoreo de vencimientos en SAP; la gestión inicia 90 días antes</p></div><div><span class="core-k">TERMINA CON</span><p>Renovación enviada a Diseño, o terminación</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Renovación con cambios (dimensionamiento y costeo)</b><span>a Diseño · Preventa</span></div><div class="io"><b>Renovación sin cambios</b><span>a Diseño · negociación</span></div><div class="io"><b>Propuesta de renovación</b><span>a Cliente</span></div><div class="io"><b>Dashboard de renovaciones</b><span>a Experiencia del Cliente</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Monitoreo de vencimientos</li><li>Renovación sin cambios</li><li>Renovación con crecimiento o refresh</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Renovaciones (versión 2023)</span><span class="badge b-tbc">Por confirmar</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">SAP</span><span class="chip ghost">Experiencia del Cliente (CSM)</span><span class="chip ghost">Gestión de Contratos de Servicios</span><span class="chip ghost">Diseño · Preventa</span><span class="chip ghost">Diseño · negociación</span><span class="chip ghost">Cliente</span><span class="chip ghost">Experiencia del Cliente</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><div class="kv"><b>Tasa de renovación</b><span>Fuente: Definición de roles Delivery / CS</span></div><div class="kv"><b>Renovación a tiempo</b><span>Fuente: Modelo organizacional CS</span></div><p class="sublbl">RIESGOS · AMEF Q2C</p><div class="risk"><span>Procesos de renovaciones y CX no integrados</span><span class="score" title="Puntuación AMEF">48</span></div></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="exp" aria-label="Gestión de la Experiencia del Cliente">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso misional 6 de 6</p>
+      <h1>Gestión de la Experiencia del Cliente</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Área de Renovaciones · CX y CSM</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">Tablero de adopción y Health Score</span><span class="chip ghost">Power BI</span><span class="chip ghost">ServiceNow (consulta)</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿El servicio cumple SLA pero el cliente percibe poco valor?</b><span>Sí → brecha de adopción: plan de cierre de brechas</span></div><div class="dec"><b>¿Hay riesgo de no renovación?</b><span>Sí → Comité de Cuentas en Riesgo y aviso a Renovaciones</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Customer Experience (CX)</span><span class="chip">Customer Success (CSM)</span><span class="chip">Ventas</span><span class="chip">Delivery</span></div><p class="roles">Customer Success Manager · equipo de Customer Experience (CSM y CX son equipos independientes dentro del área de Renovaciones)</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Hand off al cierre del proyecto</b><span>de Entrega e Implementación</span></div><div class="io"><b>Welcome kit y SLA</b><span>de Contratos de Servicios</span></div><div class="io"><b>Datos operativos y escalamientos</b><span>de Operación y Monitoreo</span></div><div class="io"><b>Tickets del cliente</b><span>de Tecnologías de la Información</span></div><div class="io"><b>Dashboard de renovaciones</b><span>de Gestión de Renovaciones</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gestión de la Experiencia del Cliente</h2>
+      <p class="core-obj">Medir la satisfacción del cliente (CX) y asegurar que adopte y obtenga valor de lo contratado (CSM), para sostener la renovación y la expansión.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Hand off al cierre del proyecto u onboarding del servicio</p></div><div><span class="core-k">TERMINA CON</span><p>Continuo durante el ciclo de vida del contrato</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>QBR, encuestas y Success Plan</b><span>a Cliente</span></div><div class="io"><b>Oportunidades de expansión</b><span>a Identificación de Oportunidades</span></div><div class="io"><b>Riesgo de no renovación</b><span>a Gestión de Renovaciones</span></div><div class="io"><b>Plan de acción</b><span>a Áreas de NTT DATA</span></div><div class="io"><b>Métricas de adopción para programas de fabricante</b><span>a Alianzas y Partners</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Medición de satisfacción (NPS, CSAT)</li><li>Onboarding y Success Plan</li><li>Plan de adopción y casos de uso</li><li>Health Score y telemetría</li><li>Gestión de activos y consumo de licencias (EA)</li><li>Revisión ejecutiva de valor (QBR)</li><li>Expansión y nuevos proyectos con Ventas</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Gestión de solicitudes, expectativas y experiencia</span><span class="badge b-tbc">Por confirmar</span></div><div class="doc"><span class="tipo">Guía</span><span class="dn">Modelo organizacional de Customer Success (propuesta)</span><span class="badge b-tbc">Por confirmar</span></div><div class="doc"><span class="tipo">Guía</span><span class="dn">Delivery vs. Sales / Customer Success: definición de roles</span><span class="badge b-ok">Vigente</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Entrega e Implementación</span><span class="chip ghost">Contratos de Servicios</span><span class="chip ghost">Operación y Monitoreo</span><span class="chip ghost">Tecnologías de la Información</span><span class="chip ghost">Gestión de Renovaciones</span><span class="chip ghost">Cliente</span><span class="chip ghost">Identificación de Oportunidades</span><span class="chip ghost">Áreas de NTT DATA</span><span class="chip ghost">Alianzas y Partners</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><div class="kv"><b>Adopción por caso de uso</b><span>Fuente: Modelo organizacional CS</span></div><div class="kv"><b>Health Score</b><span>Fuente: Modelo organizacional CS</span></div><div class="kv"><b>Onboard % y Adopt %</b><span>Fuente: Modelo organizacional CS</span></div><div class="kv"><b>NPS y CSAT</b><span>Fuente: Definición de roles Delivery / CS</span></div><div class="kv"><b>Retención de ingresos</b><span>Fuente: Definición de roles Delivery / CS</span></div><div class="kv"><b>Expansión</b><span>Fuente: Modelo organizacional CS</span></div><p class="sublbl">RIESGOS · AMEF Q2C</p><div class="risk"><span>Procesos de renovaciones y CX no integrados</span><span class="score" title="Puntuación AMEF">48</span></div></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="e1" aria-label="Planeación y Despliegue de la Estrategia">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso estratégico</p>
+      <h1>Planeación y Despliegue de la Estrategia</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Dirección</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><p class="ph">[Sistemas y herramientas por validar]</p></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><p class="ph">[Sin decisiones de alto nivel definidas]</p></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Dirección</span></div><p class="ph">[Roles por validar]</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Indicadores del ciclo Q2C y lecciones aprendidas</b><span>de Procesos de la cadena de valor</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Planeación y Despliegue de la Estrategia</h2>
+      <p class="core-obj">[Por validar] Definir la estrategia, los objetivos y las metas, y desplegarlos a las áreas.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Ciclo de planeación del año fiscal</p></div><div><span class="core-k">TERMINA CON</span><p>Objetivos desplegados y en seguimiento</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Objetivos y metas por área</b><span>a Todas las áreas</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="ph">[Subprocesos por definir]</p><p class="sublbl">DOCUMENTOS</p><p class="ph">[Sin documentos identificados]</p></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Procesos de la cadena de valor</span><span class="chip ghost">Todas las áreas</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><p class="ph">[Indicadores por definir]</p><p class="sublbl">RIESGOS · AMEF Q2C</p><p class="ph">[Sin riesgos identificados en el AMEF; por levantar]</p></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="e2" aria-label="Innovación y Desarrollo del Portafolio">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso estratégico</p>
+      <h1>Innovación y Desarrollo del Portafolio</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: [Por definir]</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><p class="ph">[Sistemas y herramientas por validar]</p></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><p class="ph">[Sin decisiones de alto nivel definidas]</p></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">[Por definir]</span></div><p class="ph">[Roles por validar]</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Oportunidades de expansión y necesidades de clientes</b><span>de Experiencia del Cliente</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Innovación y Desarrollo del Portafolio</h2>
+      <p class="core-obj">[Por validar] Definir y evolucionar el portafolio de servicios y las arquitecturas de referencia.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>[Por definir]</p></div><div><span class="core-k">TERMINA CON</span><p>[Por definir]</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Catálogo de portafolio y arquitecturas de referencia</b><span>a Diseño y Arquitectura de Soluciones</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="ph">[Subprocesos por definir]</p><p class="sublbl">DOCUMENTOS</p><p class="ph">[Sin documentos identificados]</p></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Experiencia del Cliente</span><span class="chip ghost">Diseño y Arquitectura de Soluciones</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><p class="ph">[Indicadores por definir]</p><p class="sublbl">RIESGOS · AMEF Q2C</p><p class="ph">[Sin riesgos identificados en el AMEF; por levantar]</p></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="e3" aria-label="Gestión de Alianzas y Ecosistema de Partners">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso estratégico</p>
+      <h1>Gestión de Alianzas y Ecosistema de Partners</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Alianzas</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">Plataformas de fabricante</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><p class="ph">[Sin decisiones de alto nivel definidas]</p></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Alianzas</span></div><p class="ph">[Roles por validar]</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Métricas de adopción (Onboard y Adopt) para programas del fabricante</b><span>de Experiencia del Cliente</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gestión de Alianzas y Ecosistema de Partners</h2>
+      <p class="core-obj">[Por validar] Gestionar la relación con fabricantes y partners que soportan el portafolio.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>[Por definir]</p></div><div><span class="core-k">TERMINA CON</span><p>[Por definir]</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Registro de la oportunidad con el fabricante (por validar)</b><span>a Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Reporte de Alianzas para comisiones</b><span>a Gestión del Talento</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="ph">[Subprocesos por definir]</p><p class="sublbl">DOCUMENTOS</p><p class="ph">[Sin documentos identificados]</p></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Experiencia del Cliente</span><span class="chip ghost">Diseño y Arquitectura de Soluciones</span><span class="chip ghost">Gestión del Talento</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><p class="ph">[Indicadores por definir]</p><p class="sublbl">RIESGOS · AMEF Q2C</p><p class="ph">[Sin riesgos identificados en el AMEF; por levantar]</p></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="e4" aria-label="Gobierno Corporativo y Gestión de Riesgos">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso estratégico</p>
+      <h1>Gobierno Corporativo y Gestión de Riesgos</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Dirección</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">SpeakUp</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><p class="ph">[Sin decisiones de alto nivel definidas]</p></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Dirección</span><span class="chip">Legal</span></div><p class="ph">[Roles por validar]</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Revisión ganada / perdida</b><span>de Diseño y Arquitectura de Soluciones</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gobierno Corporativo y Gestión de Riesgos</h2>
+      <p class="core-obj">[Por validar] Establecer las reglas de autorización, ética y gestión de riesgos de la organización.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>[Por definir]</p></div><div><span class="core-k">TERMINA CON</span><p>[Por definir]</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Matriz de autorizaciones de márgenes y descuentos</b><span>a Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Comités de aprobación</b><span>a Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Código de ética y canal SpeakUp</b><span>a Todas las áreas</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="ph">[Subprocesos por definir]</p><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Guía</span><span class="dn">Matriz de autorizaciones México</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Guía</span><span class="dn">Comités de aprobación (FY24)</span><span class="badge b-tbc">Por confirmar</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Diseño y Arquitectura de Soluciones</span><span class="chip ghost">Todas las áreas</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><p class="ph">[Indicadores por definir]</p><p class="sublbl">RIESGOS · AMEF Q2C</p><p class="ph">[Sin riesgos identificados en el AMEF; por levantar]</p></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="tal" aria-label="Gestión y Desarrollo del Talento">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso de soporte</p>
+      <h1>Gestión y Desarrollo del Talento</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: People &amp; Culture</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">Workday</span><span class="chip ghost">SAP</span><span class="chip ghost">LinkedIn y OCC</span><span class="chip ghost">Microsoft Forms</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿La solicitud de personal está aprobada por el CFD?</b><span>Sí → reclutamiento</span></div><div class="dec"><b>¿El reporte de comisiones requiere aprobación del CFD?</b><span>Sí → se envía a aprobación</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">People &amp; Culture</span></div><p class="roles">Talent Acquisition Consultant · HR Generalist · HR Manager · Learning and Development Specialist</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Solicitud de personal</b><span>de Gerentes y PMO</span></div><div class="io"><b>Aprobación de la contratación</b><span>de Chief Financial Director</span></div><div class="io"><b>Cálculo de comisiones</b><span>de Ventas (reporte SAP)</span></div><div class="io"><b>Reportes de MS, Marketing y Alianzas</b><span>de Áreas comerciales</span></div><div class="io"><b>Notificación de renuncia</b><span>de Colaborador</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gestión y Desarrollo del Talento</h2>
+      <p class="core-obj">Atraer, desarrollar, compensar y desvincular al personal que la organización necesita.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Solicitud de personal aprobada</p></div><div><span class="core-k">TERMINA CON</span><p>Desvinculación del colaborador</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Personal contratado</b><span>a Área solicitante</span></div><div class="io"><b>Solicitud de credencial del nuevo colaborador</b><span>a Servicios Generales</span></div><div class="io"><b>Comisiones aprobadas para nómina</b><span>a Gestión Financiera</span></div><div class="io"><b>Programa de capacitación</b><span>a Todas las áreas</span></div><div class="io"><b>Checklist de salida (TI, Finanzas, Administración)</b><span>a Áreas clave</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Reclutamiento y selección</li><li>Inducción, concientización y capacitación</li><li>Evaluación de desempeño</li><li>Compensaciones y comisiones</li><li>Desvinculación</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Reclutamiento y selección</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Concientización y capacitación del personal</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Evaluación de desempeño</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Compensaciones (2023)</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Desvinculación NTT DATA y externos</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Política</span><span class="dn">Fondo de ahorro</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Política</span><span class="dn">Uso de credencial y estacionamiento</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Carta de adhesión al SGI y políticas internas</span><span class="badge b-ok">Vigente</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Gerentes y PMO</span><span class="chip ghost">Chief Financial Director</span><span class="chip ghost">Ventas (reporte SAP)</span><span class="chip ghost">Áreas comerciales</span><span class="chip ghost">Colaborador</span><span class="chip ghost">Área solicitante</span><span class="chip ghost">Servicios Generales</span><span class="chip ghost">Gestión Financiera</span><span class="chip ghost">Todas las áreas</span><span class="chip ghost">Áreas clave</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><p class="ph">[Indicadores por definir]</p><p class="sublbl">RIESGOS · AMEF Q2C</p><div class="risk"><span>Capacitación insuficiente y rotación</span><span class="score" title="Puntuación AMEF">52</span></div></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="fin" aria-label="Gestión Financiera y Presupuestal">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso de soporte</p>
+      <h1>Gestión Financiera y Presupuestal</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Finanzas</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">SAP</span><span class="chip ghost">Direct</span><span class="chip ghost">Buzón de facturación</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿Es factura anticipada?</b><span>Sí → solicitud del cliente y autorización del CFO</span></div><div class="dec"><b>¿El pedido cumple crédito?</b><span>Sí → se libera · No → se condiciona o bloquea</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Finanzas</span></div><p class="roles">Crédito y cobranza · Facturación · Tesorería · Cuentas por pagar · Support Accountant</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Solicitud de alta de cliente y crédito</b><span>de Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Solicitud de facturación de HW y SW</b><span>de Gestión Logística</span></div><div class="io"><b>Solicitud de facturación de MS, SS y TS</b><span>de Contratos de Servicios</span></div><div class="io"><b>Facturación de TS y reconocimiento</b><span>de PMO</span></div><div class="io"><b>Confirmación para facturación recurrente</b><span>de Operación y Monitoreo</span></div><div class="io"><b>Sales order con WBS</b><span>de Sales Support</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gestión Financiera y Presupuestal</h2>
+      <p class="core-obj">Dar de alta y otorgar crédito a clientes, facturar, cobrar y aplicar los pagos con trazabilidad.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Solicitud de alta de cliente o de facturación</p></div><div><span class="core-k">TERMINA CON</span><p>Pago identificado y aplicado en el ERP</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Factura (CFDI) y estado de cuenta</b><span>a Cliente</span></div><div class="io"><b>Liberación por crédito</b><span>a Entrega e Implementación</span></div><div class="io"><b>Estado de la cartera</b><span>a Identificación de Oportunidades</span></div><div class="io"><b>Crédito aprobado</b><span>a Diseño y Arquitectura de Soluciones</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Alta de cliente y crédito</li><li>Facturación</li><li>Cobranza y aplicación de pagos</li><li>Cuentas por pagar y tesorería</li><li>Reconocimiento de ingresos</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Facturación</span><span class="badge b-ok">Vigente</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Diseño y Arquitectura de Soluciones</span><span class="chip ghost">Gestión Logística</span><span class="chip ghost">Contratos de Servicios</span><span class="chip ghost">PMO</span><span class="chip ghost">Operación y Monitoreo</span><span class="chip ghost">Sales Support</span><span class="chip ghost">Cliente</span><span class="chip ghost">Entrega e Implementación</span><span class="chip ghost">Identificación de Oportunidades</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><div class="kv"><b>Factura de servicios liberada antes del día 13</b><span>Fuente: Gestión de facturación de servicios</span></div><div class="kv"><b>Aging de cartera y DSO</b><span>Fuente: SIPOC Ventas</span></div><p class="sublbl">RIESGOS · AMEF Q2C</p><div class="risk"><span>Inconsistencia en datos para booking y facturación</span><span class="score" title="Puntuación AMEF">56</span></div><div class="risk"><span>Soporte documental insuficiente</span><span class="score" title="Puntuación AMEF">49</span></div><div class="risk"><span>Desalineación entre costos reales y rates</span><span class="score" title="Puntuación AMEF">49</span></div><div class="risk"><span>Dependencia del reporte DUNS</span><span class="score" title="Puntuación AMEF">44</span></div><div class="risk"><span>Desajustes por tipo de cambio en SAP</span><span class="score" title="Puntuación AMEF">39</span></div></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="com" aria-label="Gestión de Compras y Proveedores">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso de soporte</p>
+      <h1>Gestión de Compras y Proveedores</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Compras (Procurement)</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">MX Procurement</span><span class="chip ghost">SAP</span><span class="chip ghost">Direct</span><span class="chip ghost">K2</span><span class="chip ghost">Checklist</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿Es proveedor nuevo?</b><span>Sí → alta de proveedor con validaciones</span></div><div class="dec"><b>¿El monto requiere aprobación?</b><span>Sí → aprobación del manager de área o del CFD</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Compras</span></div><p class="roles">Procurement Specialist</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Solicitud de cotización</b><span>de Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Requisición de orden de compra (folio SOA)</b><span>de Sales Support</span></div><div class="io"><b>Solicitud de cotizaciones y SPO</b><span>de PMO</span></div><div class="io"><b>Cotizaciones</b><span>de Proveedores</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gestión de Compras y Proveedores</h2>
+      <p class="core-obj">Adquirir bienes y servicios con criterios de calidad, costo y oportunidad, y gestionar el desempeño de los proveedores.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Solicitud de cotización o requisición de compra</p></div><div><span class="core-k">TERMINA CON</span><p>Orden de compra colocada y proveedor evaluado</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Cotizaciones para el costeo</b><span>a Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Orden de compra (NTTPO)</b><span>a Gestión Logística</span></div><div class="io"><b>Cierre de folio con NTTPO</b><span>a Sales Support</span></div><div class="io"><b>Orden de compra y cotización</b><span>a Proveedores</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Solicitud de cotización</li><li>Alta y gestión de proveedores</li><li>Colocación de órdenes de compra</li><li>Gestión de SLAs y desempeño de proveedores</li><li>Sustitución de proveedores críticos</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Solicitud de cotización</span><span class="badge b-wip">En construcción</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Alta y gestión de proveedores</span><span class="badge b-wip">En construcción</span></div><div class="doc"><span class="tipo">Política</span><span class="dn">Gestión de proveedores</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Política</span><span class="dn">Gestión de SLAs con proveedores</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Guía</span><span class="dn">Sustitución de proveedores críticos</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Evaluación de desempeño del proveedor</span><span class="badge b-tbc">Por confirmar</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Diseño y Arquitectura de Soluciones</span><span class="chip ghost">Sales Support</span><span class="chip ghost">PMO</span><span class="chip ghost">Proveedores</span><span class="chip ghost">Gestión Logística</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><p class="ph">[Indicadores por definir]</p><p class="sublbl">RIESGOS · AMEF Q2C</p><div class="risk"><span>Trazabilidad insuficiente de proveedores y entregables</span><span class="score" title="Puntuación AMEF">44</span></div><div class="risk"><span>Proceso de compras poco eficiente</span><span class="score" title="Puntuación AMEF">43</span></div><div class="risk"><span>Alta de proveedores lenta</span><span class="score" title="Puntuación AMEF">43</span></div></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="leg" aria-label="Gestión Legal y Cumplimiento">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso de soporte</p>
+      <h1>Gestión Legal y Cumplimiento</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Legal</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">Diario Oficial de la Federación</span><span class="chip ghost">Tabla de requisitos legales</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿Hubo requisitos derogados, abrogados o nuevos?</b><span>Sí → se actualiza la tabla de requisitos legales</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Legal</span></div><p class="roles">Responsable de Legal</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Propuesta y términos para revisión</b><span>de Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Contratos con proveedores y cambios</b><span>de Compras y Proveedores</span></div><div class="io"><b>Fuentes normativas</b><span>de Externo</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gestión Legal y Cumplimiento</h2>
+      <p class="core-obj">Identificar y evaluar el cumplimiento de requisitos legales y revisar los contratos de clientes y proveedores.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Revisión trimestral de fuentes normativas o solicitud de revisión contractual</p></div><div><span class="core-k">TERMINA CON</span><p>Requisitos actualizados y evaluados, o contrato aprobado</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Redlines y aprobación del contrato</b><span>a Diseño y Arquitectura de Soluciones</span></div><div class="io"><b>Contrato firmado</b><span>a Entrega e Implementación</span></div><div class="io"><b>Requisitos legales aplicables</b><span>a Todos los procesos</span></div><div class="io"><b>Evaluación de cumplimiento</b><span>a Gestión Integrada del SGI</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Identificación y evaluación de requisitos legales</li><li>Revisión de propuestas y contratos con clientes</li><li>Contratos con proveedores y sus cambios</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Identificación y evaluación de requisitos legales</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Formato</span><span class="dn">Tabla de requisitos legales</span><span class="badge b-tbc">Por confirmar</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Diseño y Arquitectura de Soluciones</span><span class="chip ghost">Compras y Proveedores</span><span class="chip ghost">Externo</span><span class="chip ghost">Entrega e Implementación</span><span class="chip ghost">Todos los procesos</span><span class="chip ghost">Gestión Integrada del SGI</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><p class="ph">[Indicadores por definir]</p><p class="sublbl">RIESGOS · AMEF Q2C</p><div class="risk"><span>Retrasos en revisiones legales</span><span class="score" title="Puntuación AMEF">52</span></div></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="log" aria-label="Gestión Logística">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso de soporte</p>
+      <h1>Gestión Logística</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Logística</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">SAP</span><span class="chip ghost">Direct</span><span class="chip ghost">Excel de backlog</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿Requiere factura contra entrega?</b><span>Sí → solicitud de facturación urgente</span></div><div class="dec"><b>¿El valor del hardware supera 20 mil USD?</b><span>Sí → entrega dedicada</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Logística</span><span class="chip">Almacén</span></div><p class="roles">Logistics and Supply Chain Specialist · Logistics Administrator · Warehousing Administrator · Warehouse Associate</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Orden de compra (NTTPO)</b><span>de Compras y Proveedores</span></div><div class="io"><b>Creación de NTT PO</b><span>de Sales Support</span></div><div class="io"><b>Equipos, remisión y factura</b><span>de Proveedores y fabricantes</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gestión Logística</h2>
+      <p class="core-obj">Dar seguimiento, recibir y entregar al cliente los bienes adquiridos, desde el backlog hasta forecast vs. facturación.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Orden de compra a surtir (NTTPO)</p></div><div><span class="core-k">TERMINA CON</span><p>Entrega con comprobante firmado y solicitud de facturación</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Entrega con comprobante firmado</b><span>a Cliente</span></div><div class="io"><b>Solicitud de facturación y reconocimiento</b><span>a Gestión Financiera</span></div><div class="io"><b>Fechas de entrega (ETA) semanales</b><span>a Ventas, PMO y CSM</span></div><div class="io"><b>Cotización de transacción internacional</b><span>a Diseño y Arquitectura de Soluciones</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Backlog y seguimiento a proveedores</li><li>Recepción de mercancía</li><li>Confirmación de datos de entrega</li><li>Entrega y evidencia</li><li>Forecast vs. facturación</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Logística</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Diagrama</span><span class="dn">Flujo de logística</span><span class="badge b-tbc">Por confirmar</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Compras y Proveedores</span><span class="chip ghost">Sales Support</span><span class="chip ghost">Proveedores y fabricantes</span><span class="chip ghost">Cliente</span><span class="chip ghost">Gestión Financiera</span><span class="chip ghost">Ventas, PMO y CSM</span><span class="chip ghost">Diseño y Arquitectura de Soluciones</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><div class="kv"><b>Importación consolidada en Laredo</b><span>Fuente: Procedimiento de Logística</span></div><div class="kv"><b>Revisión trimestral con el agente aduanal</b><span>Fuente: Procedimiento de Logística</span></div><div class="kv"><b>Entrega al usuario entre 1 y 4 semanas</b><span>Fuente: SIPOC Logística</span></div><p class="sublbl">RIESGOS · AMEF Q2C</p><p class="ph">[Sin riesgos identificados en el AMEF; por levantar]</p></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="sg" aria-label="Gestión de Servicios Generales">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso de soporte</p>
+      <h1>Gestión de Servicios Generales</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Facilities</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">ServiceNow</span><span class="chip ghost">Correo</span><span class="chip ghost">Bitácoras de acceso</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿Requiere estacionamiento o acceso restringido?</b><span>Sí → se solicita a Torre Mayor junto con la credencial</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Facilities</span><span class="chip">Recepción</span></div><p class="roles">Facilities Administrator · Recepción · Administración de Torre Mayor (externo)</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Solicitud de credencial del nuevo colaborador</b><span>de Gestión del Talento</span></div><div class="io"><b>Aviso de visita</b><span>de Colaborador solicitante</span></div><div class="io"><b>Credencial elaborada</b><span>de Torre Mayor</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gestión de Servicios Generales</h2>
+      <p class="core-obj">Gestionar el acceso a las instalaciones de colaboradores, visitantes y proveedores.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Solicitud de credencial o aviso de visita</p></div><div><span class="core-k">TERMINA CON</span><p>Credencial entregada o visita concluida</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Ticket de activación de credencial</b><span>a Tecnologías de la Información</span></div><div class="io"><b>Credencial y reglas de uso</b><span>a Colaborador</span></div><div class="io"><b>Acceso, tríptico de seguridad y aviso de privacidad</b><span>a Visitantes y proveedores</span></div><div class="io"><b>Viáticos, espacios y mensajería (por validar)</b><span>a Entrega e Implementación</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Ingreso de visitantes y proveedores</li><li>Creación, activación y entrega de credenciales</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Ingreso de visitantes y proveedores</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Creación, activación y entrega de credenciales</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Diagrama</span><span class="dn">Creación, activación y entrega de credenciales</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Badge Requisition (inglés, 2025)</span><span class="badge b-tbc">Por confirmar</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Gestión del Talento</span><span class="chip ghost">Colaborador solicitante</span><span class="chip ghost">Torre Mayor</span><span class="chip ghost">Tecnologías de la Información</span><span class="chip ghost">Colaborador</span><span class="chip ghost">Visitantes y proveedores</span><span class="chip ghost">Entrega e Implementación</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><div class="kv"><b>Credencial elaborada en 24 a 48 horas</b><span>Fuente: Creación, activación y entrega de credenciales</span></div><div class="kv"><b>Estacionamiento activado en 24 a 72 horas</b><span>Fuente: Creación, activación y entrega de credenciales</span></div><p class="sublbl">RIESGOS · AMEF Q2C</p><p class="ph">[Sin riesgos identificados en el AMEF; por levantar]</p></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="mkt" aria-label="Marketing y Comunicación">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso de soporte</p>
+      <h1>Marketing y Comunicación</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Marketing</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">Salesforce</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><p class="ph">[Sin decisiones de alto nivel definidas]</p></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Marketing</span></div><p class="ph">[Roles por validar]</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><p class="ph">[Entradas por validar]</p></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Marketing y Comunicación</h2>
+      <p class="core-obj">[Por validar] Generar demanda y prospectos para Ventas.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>[Por definir]</p></div><div><span class="core-k">TERMINA CON</span><p>[Por definir]</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Leads de campañas y eventos</b><span>a Identificación de Oportunidades</span></div><div class="io"><b>Reporte de Marketing para comisiones</b><span>a Gestión del Talento</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="ph">[Subprocesos por definir]</p><p class="sublbl">DOCUMENTOS</p><p class="ph">[Sin documentos identificados]</p></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Identificación de Oportunidades</span><span class="chip ghost">Gestión del Talento</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><p class="ph">[Indicadores por definir]</p><p class="sublbl">RIESGOS · AMEF Q2C</p><p class="ph">[Sin riesgos identificados en el AMEF; por levantar]</p></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="con" aria-label="Gestión de Contratos de Servicios">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso de soporte</p>
+      <h1>Gestión de Contratos de Servicios</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Área de Renovaciones · Gestión de Contratos de Servicios</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">SAP</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿El contrato es de licencias o de terceros?</b><span>Sí → solicitar póliza y carta de activación al fabricante</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Gestión de Contratos de Servicios</span></div><p class="roles">Service Contract Administrator</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Órdenes de servicio</b><span>de Sales Support</span></div><div class="io"><b>Póliza y carta de activación</b><span>de Proveedores y fabricantes</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gestión de Contratos de Servicios</h2>
+      <p class="core-obj">[Por validar] Activar y controlar los contratos de servicio, sus SLA y sus vencimientos.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Orden de servicio nueva</p></div><div><span class="core-k">TERMINA CON</span><p>Contrato activo y vencimiento informado</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Welcome kit</b><span>a Cliente</span></div><div class="io"><b>Welcome kit, SLA y reporte de contratos</b><span>a Experiencia del Cliente</span></div><div class="io"><b>Solicitud de factura de MS, SS y TS</b><span>a Gestión Financiera</span></div><div class="io"><b>Fechas de vencimiento de contratos (por validar)</b><span>a Gestión de Renovaciones</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Activación de contratos</li><li>Welcome kit</li><li>Solicitud de facturación de servicios</li><li>Control de vencimientos</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Diagrama</span><span class="dn">Gestión de facturación (incluye activación de contratos)</span><span class="badge b-tbc">Por confirmar</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Sales Support</span><span class="chip ghost">Proveedores y fabricantes</span><span class="chip ghost">Cliente</span><span class="chip ghost">Experiencia del Cliente</span><span class="chip ghost">Gestión Financiera</span><span class="chip ghost">Gestión de Renovaciones</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><p class="ph">[Indicadores por definir]</p><p class="sublbl">RIESGOS · AMEF Q2C</p><p class="ph">[Sin riesgos identificados en el AMEF; por levantar]</p></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="ti" aria-label="Gestión de Tecnologías de la Información">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso de soporte</p>
+      <h1>Gestión de Tecnologías de la Información</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: TI</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">ServiceNow</span><span class="chip ghost">IT HUB</span><span class="chip ghost">Okta Verify</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><div class="dec"><b>¿El incidente de seguridad amerita revisar cámaras?</b><span>Sí → ticket en IT HUB, revisión y reporte</span></div></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">TI</span></div><p class="roles">IT Generalist Analyst</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Hardware y checklist de entrega</b><span>de Proveedores</span></div><div class="io"><b>Solicitud de equipo (ticket)</b><span>de Áreas usuarias</span></div><div class="io"><b>Ticket de activación de credencial</b><span>de Servicios Generales</span></div><div class="io"><b>Incidentes de seguridad de la información</b><span>de Gestión Integrada del SGI</span></div><div class="io"><b>Checklist de salida del colaborador</b><span>de Gestión del Talento</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Gestión de Tecnologías de la Información</h2>
+      <p class="core-obj">Asignar y controlar los activos tecnológicos, los accesos y la revisión de seguridad física de las instalaciones.</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Ticket en ServiceNow o recepción de hardware</p></div><div><span class="core-k">TERMINA CON</span><p>Activo asignado con carta responsiva o ticket cerrado</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Equipo asignado y carta responsiva</b><span>a Colaborador</span></div><div class="io"><b>Credencial activada</b><span>a Servicios Generales</span></div><div class="io"><b>Reporte de revisión de cámaras</b><span>a Involucrados</span></div><div class="io"><b>Herramienta de tickets del cliente</b><span>a Experiencia del Cliente</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Carga y descarga de activos</li><li>Activación de credenciales y accesos</li><li>Autenticación de usuarios</li><li>Revisión de cámaras de seguridad</li></ol><p class="sublbl">DOCUMENTOS</p><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Carga y descarga de activos</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Procedimiento</span><span class="dn">Revisión de cámaras</span><span class="badge b-ok">Vigente</span></div><div class="doc"><span class="tipo">Instructivo</span><span class="dn">Manual de autenticación de usuario (Okta)</span><span class="badge b-ok">Vigente</span></div></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Proveedores</span><span class="chip ghost">Áreas usuarias</span><span class="chip ghost">Servicios Generales</span><span class="chip ghost">Gestión Integrada del SGI</span><span class="chip ghost">Gestión del Talento</span><span class="chip ghost">Colaborador</span><span class="chip ghost">Involucrados</span><span class="chip ghost">Experiencia del Cliente</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><p class="ph">[Indicadores por definir]</p><p class="sublbl">RIESGOS · AMEF Q2C</p><p class="ph">[Sin riesgos identificados en el AMEF; por levantar]</p></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
+</section>
+<section class="page" id="sgi" aria-label="Medición, Mejora Continua y Gestión Integrada del SGI">
+  <header class="fhead">
+    <div>
+      <p class="crumb"><button type="button" class="lnk" onclick="go('mapa')">← Arquitectura de procesos</button> · Proceso transversal</p>
+      <h1>Medición, Mejora Continua y Gestión Integrada del SGI</h1>
+    </div>
+    <div class="pills"><span class="pill">Responsable: Procesos y Certificaciones</span><span class="pill">Estado: Borrador</span></div>
+  </header>
+  <div class="turtle">
+    <div class="card a-conque"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Con qué · sistemas y recursos</div><div class="chips"><span class="chip ghost">SharePoint (repositorio documental del SGI)</span></div></div>
+    <div class="card a-dec soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l9 9-9 9-9-9z"/></svg>Decisiones del proceso</div><p class="ph">[Sin decisiones de alto nivel definidas]</p></div>
+    <div class="card a-quien"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.3 0 4 1.5 4.6 4"/></svg>Con quién · áreas y roles</div><div class="chips"><span class="chip">Procesos y Certificaciones</span></div><p class="roles">Coordinación SGI · Responsables y gestores del SGI</p></div>
+    <div class="card a-in"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 12h13M11 6l6 6-6 6M21 4v16"/></svg>Entradas · recibe de</div><div class="io"><b>Informes de proceso e indicadores</b><span>de Todos los procesos</span></div><div class="io"><b>Evaluación de cumplimiento legal</b><span>de Legal y Cumplimiento</span></div></div>
+    <div class="arr a-ar1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="core a-core">
+      <span class="core-k">PROCESO</span>
+      <h2>Medición, Mejora Continua y Gestión Integrada del SGI</h2>
+      <p class="core-obj">Medir, analizar y mejorar los procesos y mantener certificado el Sistema de Gestión Integrado (ISO 9001, 20000-1 y 27001).</p>
+      <div class="core-io"><div><span class="core-k">INICIA CON</span><p>Ciclo anual del SGI</p></div><div><span class="core-k">TERMINA CON</span><p>Revisión por la dirección, auditorías y certificación</p></div></div>
+    </div>
+    <div class="arr a-ar2"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></div>
+    <div class="card a-out"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 4v16M7 12h13M14 6l6 6-6 6"/></svg>Salidas · entrega a</div><div class="io"><b>Requisitos para la operación del SGI</b><span>a Todos los procesos</span></div><div class="io"><b>Lista maestra de documentos</b><span>a Responsables y gestores del SGI</span></div><div class="io"><b>Carta de adhesión al SGI</b><span>a Gestión del Talento</span></div></div>
+    <div class="card a-como"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12"/><circle cx="4" cy="6" r="1"/><circle cx="4" cy="12" r="1"/><circle cx="4" cy="18" r="1"/></svg>Cómo · subprocesos y documentos</div><p class="sublbl">SUBPROCESOS</p><ol class="subs"><li>Medición, análisis y mejora continua</li><li>Gestión integrada del SGI</li><li>Auditorías y certificaciones</li></ol><p class="sublbl">DOCUMENTOS</p><p class="ph">[Sin documentos identificados]</p></div>
+    <div class="card a-inter soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Interactúa con</div><div class="chips"><span class="chip ghost">Todos los procesos</span><span class="chip ghost">Legal y Cumplimiento</span><span class="chip ghost">Responsables y gestores del SGI</span><span class="chip ghost">Gestión del Talento</span></div></div>
+    <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="sublbl">INDICADORES</p><div class="kv"><b>Set mínimo de KPIs del Q2C (propuesto)</b><span>Fuente: AMEF Q2C</span></div><p class="sublbl">RIESGOS · AMEF Q2C</p><div class="risk"><span>Repositorio documental disperso</span><span class="score" title="Puntuación AMEF">55</span></div><div class="risk"><span>Fragmentación del Q2C y falta de dueños claros</span><span class="score" title="Puntuación AMEF">55</span></div><div class="risk"><span>Falta de KPIs integrados</span><span class="score" title="Puntuación AMEF">54</span></div><div class="risk"><span>Documentación insuficiente de procesos clave</span><span class="score" title="Puntuación AMEF">52</span></div></div>
+  </div>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver a la arquitectura de procesos</button></p>
 </section>
 <script>
 function go(id){
