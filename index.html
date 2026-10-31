@@ -1,20 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mapa de procesos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--ink:#142033;--quiet:#5A6878;--line:#D9E1EA;--soft:#F4F7FB;--card:#FFFFFF;--blue:#0B4F80;--blue2:#0072BC;--tint:#E3F0FA;--new:#0072BC;--wip:#8A4512;--wipbg:#FCEBDD;--ok:#1F6B4A;--okbg:#E2F3EC;--tbc:#5A4A00;--tbcbg:#FFF4C2}
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--soft);color:var(--ink);font-family:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.45}
+html,body{margin:0;background:var(--soft);color:var(--ink);font-family:'DM Sans',system-ui,-apple-system,"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.45}
 a{color:var(--blue2)}a:hover{color:var(--blue)}
 .page{display:none;max-width:1280px;margin:0 auto;padding:0 0 32px}
-.page:target{display:block}
-#mapa{display:block;padding:32px 24px}
-.page:target ~ #mapa{display:none}
+.page.on{display:block}
+#mapa{padding:32px 24px}
 .eyebrow{margin:0 0 6px;font-size:12px;font-weight:600;letter-spacing:.08em;color:var(--blue2)}
 h1{margin:0;font-size:28px;font-weight:600;letter-spacing:-.01em}
 .lead{margin:8px 0 0;color:var(--quiet);max-width:760px}
@@ -51,14 +50,15 @@ code{background:var(--soft);padding:1px 5px;border-radius:4px;font-size:12.5px}
 .band{background:var(--blue);color:#fff;padding:26px 32px;display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;border-radius:0 0 16px 16px}
 .band-l{max-width:680px}
 .crumb{font-size:13px;color:#BFDCF2;margin-bottom:8px}
-.crumb a{color:#fff}
+.crumb .lnk{color:#fff}
 .band h1{color:#fff}
 .obj{margin:8px 0 12px;color:#E4F0FA;font-size:15px}
 .pills{display:flex;gap:8px;flex-wrap:wrap}
 .chain{display:flex;align-items:center;flex-wrap:wrap;gap:6px;align-self:flex-start}
 .chain .sep{color:#7FAFD3}
 .step{font-size:12.5px;padding:7px 11px;border-radius:8px;border:1px solid #3D77A3;color:#E4F0FA;text-decoration:none}
-a.step:hover{background:#1F6497;color:#fff}
+button.step{background:none;font:inherit;font-size:12.5px;cursor:pointer}
+button.step:hover{background:#1F6497;color:#fff}
 .step.on{background:#fff;color:var(--blue);font-weight:600;border-color:#fff}
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:20px 24px 0}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;display:flex;flex-direction:column;gap:4px}
@@ -111,6 +111,10 @@ a.step:hover{background:#1F6497;color:#fff}
  .turtle,.kpis{padding-left:16px;padding-right:16px}
  .doc{grid-template-columns:1fr auto;grid-template-areas:"t b" "n n" "l l"}
 }
+button.mbox{font:inherit;font-size:13.5px;cursor:pointer;width:100%}
+button.mbox.mis{font-size:14px}
+button.lnk{background:none;border:0;padding:0;font:inherit;color:var(--blue2);text-decoration:underline;cursor:pointer}
+button.btn{background:#fff;color:var(--blue2);font:inherit;cursor:pointer}
 </style>
 </head>
 <body>
@@ -118,12 +122,12 @@ a.step:hover{background:#1F6497;color:#fff}
 <section class="page" id="p1" aria-label="Identificación y Desarrollo de Oportunidades">
   <header class="band">
     <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><a href="#mapa">Mapa de procesos</a> › <span>Macroproceso Q2C</span> › <span>Proceso misional 1 de 5</span></nav>
+      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso misional 1 de 5</span></nav>
       <h1>Identificación y Desarrollo de Oportunidades</h1>
       <p class="obj">Todo el proceso comercial: encontrar, desarrollar y calificar oportunidades.</p>
       <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
     </div>
-    <nav class="chain" aria-label="Cadena de valor"><span class="step on" aria-current="page">1 · Oportunidades</span><span class="sep" aria-hidden="true">›</span><a class="step" href="#p2">2 · Diseño</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p3">3 · Entrega</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p4">4 · Operación</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p5">5 · Experiencia</a></nav>
+    <nav class="chain" aria-label="Cadena de valor"><span class="step on" aria-current="page">1 · Oportunidades</span><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p2')">2 · Diseño</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p3')">3 · Entrega</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p4')">4 · Operación</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p5')">5 · Experiencia</button></nav>
   </header>
   <div class="kpis">
     <div class="kpi"><span>INICIA CON</span><b>Plan de cuenta, campaña o necesidad del cliente</b></div>
@@ -149,17 +153,17 @@ a.step:hover{background:#1F6497;color:#fff}
     <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><span class="chip ghost">Marketing y Comunicación</span><span class="chip ghost">Gestión Financiera</span></div></div>
     <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
   </div>
-  <p class="foot"><a href="#mapa">← Volver al mapa de procesos</a></p>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
 </section>
 <section class="page" id="p2" aria-label="Diseño y Arquitectura de Soluciones">
   <header class="band">
     <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><a href="#mapa">Mapa de procesos</a> › <span>Macroproceso Q2C</span> › <span>Proceso misional 2 de 5</span></nav>
+      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso misional 2 de 5</span></nav>
       <h1>Diseño y Arquitectura de Soluciones</h1>
       <p class="obj">Desarrollar la propuesta (solución, costeo, BOM, Delivery Assurance) y negociarla hasta el cierre.</p>
       <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
     </div>
-    <nav class="chain" aria-label="Cadena de valor"><a class="step" href="#p1">1 · Oportunidades</a><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">2 · Diseño</span><span class="sep" aria-hidden="true">›</span><a class="step" href="#p3">3 · Entrega</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p4">4 · Operación</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p5">5 · Experiencia</a></nav>
+    <nav class="chain" aria-label="Cadena de valor"><button type="button" class="step" onclick="go('p1')">1 · Oportunidades</button><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">2 · Diseño</span><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p3')">3 · Entrega</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p4')">4 · Operación</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p5')">5 · Experiencia</button></nav>
   </header>
   <div class="kpis">
     <div class="kpi"><span>INICIA CON</span><b>Oportunidad calificada, o renovación</b></div>
@@ -185,17 +189,17 @@ a.step:hover{background:#1F6497;color:#fff}
     <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><span class="chip ghost">Compras y Proveedores</span><span class="chip ghost">Gestión Financiera</span><span class="chip ghost">Legal y Cumplimiento</span><span class="chip ghost">Gestión Logística</span></div></div>
     <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
   </div>
-  <p class="foot"><a href="#mapa">← Volver al mapa de procesos</a></p>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
 </section>
 <section class="page" id="p3" aria-label="Entrega e Implementación de Servicios">
   <header class="band">
     <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><a href="#mapa">Mapa de procesos</a> › <span>Macroproceso Q2C</span> › <span>Proceso misional 3 de 5</span></nav>
+      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso misional 3 de 5</span></nav>
       <h1>Entrega e Implementación de Servicios</h1>
       <p class="obj">Registrar la venta y entregar lo vendido; el booking es su puerta de entrada.</p>
       <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
     </div>
-    <nav class="chain" aria-label="Cadena de valor"><a class="step" href="#p1">1 · Oportunidades</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p2">2 · Diseño</a><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">3 · Entrega</span><span class="sep" aria-hidden="true">›</span><a class="step" href="#p4">4 · Operación</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p5">5 · Experiencia</a></nav>
+    <nav class="chain" aria-label="Cadena de valor"><button type="button" class="step" onclick="go('p1')">1 · Oportunidades</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p2')">2 · Diseño</button><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">3 · Entrega</span><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p4')">4 · Operación</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p5')">5 · Experiencia</button></nav>
   </header>
   <div class="kpis">
     <div class="kpi"><span>INICIA CON</span><b>Oportunidad ganada</b></div>
@@ -221,17 +225,17 @@ a.step:hover{background:#1F6497;color:#fff}
     <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><span class="chip ghost">Compras y Proveedores</span><span class="chip ghost">Gestión Logística</span><span class="chip ghost">Gestión Financiera</span><span class="chip ghost">Legal y Cumplimiento</span><span class="chip ghost">Contratos de Servicios</span></div></div>
     <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
   </div>
-  <p class="foot"><a href="#mapa">← Volver al mapa de procesos</a></p>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
 </section>
 <section class="page" id="p4" aria-label="Operación y Monitoreo de Servicios Gestionados">
   <header class="band">
     <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><a href="#mapa">Mapa de procesos</a> › <span>Macroproceso Q2C</span> › <span>Proceso misional 4 de 5</span></nav>
+      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso misional 4 de 5</span></nav>
       <h1>Operación y Monitoreo de Servicios Gestionados</h1>
       <p class="obj">Operar los servicios post venta contratados y disparar su facturación recurrente.</p>
       <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
     </div>
-    <nav class="chain" aria-label="Cadena de valor"><a class="step" href="#p1">1 · Oportunidades</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p2">2 · Diseño</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p3">3 · Entrega</a><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">4 · Operación</span><span class="sep" aria-hidden="true">›</span><a class="step" href="#p5">5 · Experiencia</a></nav>
+    <nav class="chain" aria-label="Cadena de valor"><button type="button" class="step" onclick="go('p1')">1 · Oportunidades</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p2')">2 · Diseño</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p3')">3 · Entrega</button><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">4 · Operación</span><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p5')">5 · Experiencia</button></nav>
   </header>
   <div class="kpis">
     <div class="kpi"><span>INICIA CON</span><b>Transición a operación de un servicio</b></div>
@@ -257,17 +261,17 @@ a.step:hover{background:#1F6497;color:#fff}
     <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><span class="chip ghost">Gestión Financiera</span></div></div>
     <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
   </div>
-  <p class="foot"><a href="#mapa">← Volver al mapa de procesos</a></p>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
 </section>
 <section class="page" id="p5" aria-label="Gestión de la Experiencia del Cliente">
   <header class="band">
     <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><a href="#mapa">Mapa de procesos</a> › <span>Macroproceso Q2C</span> › <span>Proceso misional 5 de 5</span></nav>
+      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso misional 5 de 5</span></nav>
       <h1>Gestión de la Experiencia del Cliente</h1>
       <p class="obj">Medir la satisfacción y cuidar la relación con el cliente.</p>
       <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
     </div>
-    <nav class="chain" aria-label="Cadena de valor"><a class="step" href="#p1">1 · Oportunidades</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p2">2 · Diseño</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p3">3 · Entrega</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p4">4 · Operación</a><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">5 · Experiencia</span></nav>
+    <nav class="chain" aria-label="Cadena de valor"><button type="button" class="step" onclick="go('p1')">1 · Oportunidades</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p2')">2 · Diseño</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p3')">3 · Entrega</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p4')">4 · Operación</button><span class="sep" aria-hidden="true">›</span><span class="step on" aria-current="page">5 · Experiencia</span></nav>
   </header>
   <div class="kpis">
     <div class="kpi"><span>INICIA CON</span><b>Cliente activo</b></div>
@@ -293,17 +297,17 @@ a.step:hover{background:#1F6497;color:#fff}
     <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><span class="chip ghost">Contratos de Servicios</span><span class="chip ghost">Tecnologías de la Información</span></div></div>
     <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
   </div>
-  <p class="foot"><a href="#mapa">← Volver al mapa de procesos</a></p>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
 </section>
 <section class="page" id="ren" aria-label="Gestión de Renovaciones">
   <header class="band">
     <div class="band-l">
-      <nav class="crumb" aria-label="Ruta"><a href="#mapa">Mapa de procesos</a> › <span>Macroproceso Q2C</span> › <span>Proceso estratégico</span></nav>
+      <nav class="crumb" aria-label="Ruta"><button type="button" class="lnk" onclick="go('mapa')">Mapa de procesos</button> › <span>Macroproceso Q2C</span> › <span>Proceso estratégico</span></nav>
       <h1>Gestión de Renovaciones</h1>
       <p class="obj">Renovar o ampliar servicios, licenciamiento y contratos antes de su vencimiento.</p>
       <div class="pills"><span class="pill">Dueño: [Sin asignar]</span><span class="pill">Estado: Borrador</span></div>
     </div>
-    <nav class="chain" aria-label="Cadena de valor"><a class="step" href="#p1">1 · Oportunidades</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p2">2 · Diseño</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p3">3 · Entrega</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p4">4 · Operación</a><span class="sep" aria-hidden="true">›</span><a class="step" href="#p5">5 · Experiencia</a></nav>
+    <nav class="chain" aria-label="Cadena de valor"><button type="button" class="step" onclick="go('p1')">1 · Oportunidades</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p2')">2 · Diseño</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p3')">3 · Entrega</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p4')">4 · Operación</button><span class="sep" aria-hidden="true">›</span><button type="button" class="step" onclick="go('p5')">5 · Experiencia</button></nav>
   </header>
   <div class="kpis">
     <div class="kpi"><span>INICIA CON</span><b>Monitoreo de vencimientos en SAP; la gestión inicia 90 días antes</b></div>
@@ -329,17 +333,17 @@ a.step:hover{background:#1F6497;color:#fff}
     <div class="card a-sop soft"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Procesos de soporte que intervienen</div><div class="chips"><p class="ph">Por precisar.</p></div></div>
     <div class="card a-ind"><div class="lbl"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Indicadores y riesgos</div><p class="ph">[Indicadores por definir]</p><p class="ph">[Riesgos del AMEF del Q2C por vincular]</p></div>
   </div>
-  <p class="foot"><a href="#mapa">← Volver al mapa de procesos</a></p>
+  <p class="foot"><button type="button" class="lnk" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
 </section>
 <section class="page" id="pendiente" aria-label="Ficha en construcción">
   <div class="pendbox">
     <p class="eyebrow">FICHA EN CONSTRUCCIÓN</p>
     <h1>Esta ficha se integrará en una siguiente etapa</h1>
     <p class="lead">En esta prueba solo están disponibles los cinco procesos de la cadena de valor y Gestión de Renovaciones. Los demás procesos se agregarán con la información de las presentaciones de onboarding de cada área.</p>
-    <p><a class="btn" href="#mapa">← Volver al mapa de procesos</a></p>
+    <p><button type="button" class="btn" onclick="go('mapa')">← Volver al mapa de procesos</button></p>
   </div>
 </section>
-<section class="page" id="mapa" aria-label="Mapa de procesos">
+<section class="page on" id="mapa" aria-label="Mapa de procesos">
   <header class="mhead">
     <div>
       <p class="eyebrow">ARQUITECTURA DE PROCESOS · NTT DATA MÉXICO</p>
@@ -352,14 +356,14 @@ a.step:hover{background:#1F6497;color:#fff}
     <div class="side l" aria-hidden="true">NECESIDADES Y EXPECTATIVAS DE LOS STAKEHOLDERS</div>
     <div class="mapcore">
       <p class="band-lbl">01 · PROCESOS ESTRATÉGICOS</p>
-      <div class="row5"><a class="mbox muted " href="#pendiente">Planeación y Despliegue de la Estrategia</a><a class="mbox muted " href="#pendiente">Innovación y Desarrollo del Portafolio</a><a class="mbox muted " href="#pendiente">Gestión de Alianzas y Ecosistema de Partners</a><a class="mbox muted " href="#pendiente">Gobierno Corporativo y Gestión de Riesgos</a><a class="mbox new" href="#ren">Gestión de Renovaciones</a></div>
+      <div class="row5"><button type="button" class="mbox muted " onclick="go('pendiente')">Planeación y Despliegue de la Estrategia</button><button type="button" class="mbox muted " onclick="go('pendiente')">Innovación y Desarrollo del Portafolio</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión de Alianzas y Ecosistema de Partners</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gobierno Corporativo y Gestión de Riesgos</button><button type="button" class="mbox new" onclick="go('ren')">Gestión de Renovaciones</button></div>
       <p class="band-lbl">02 · PROCESOS MISIONALES · MACROPROCESO Q2C</p>
-      <div class="chainrow"><a class="mbox mis" href="#p1"><span class="n">1</span>Identificación y Desarrollo de Oportunidades<span class="sub">Ventas</span></a><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><a class="mbox mis" href="#p2"><span class="n">2</span>Diseño y Arquitectura de Soluciones<span class="sub">Preventa · Ventas</span></a><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><a class="mbox mis" href="#p3"><span class="n">3</span>Entrega e Implementación de Servicios<span class="sub">Sales Support / SOA · PMO</span></a><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><a class="mbox mis" href="#p4"><span class="n">4</span>Operación y Monitoreo de Servicios Gestionados<span class="sub">SDM · SOC / NOC</span></a><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><a class="mbox mis" href="#p5"><span class="n">5</span>Gestión de la Experiencia del Cliente<span class="sub">CX · CSM</span></a></div>
+      <div class="chainrow"><button type="button" class="mbox mis" onclick="go('p1')"><span class="n">1</span>Identificación y Desarrollo de Oportunidades<span class="sub">Ventas</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('p2')"><span class="n">2</span>Diseño y Arquitectura de Soluciones<span class="sub">Preventa · Ventas</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('p3')"><span class="n">3</span>Entrega e Implementación de Servicios<span class="sub">Sales Support / SOA · PMO</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('p4')"><span class="n">4</span>Operación y Monitoreo de Servicios Gestionados<span class="sub">SDM · SOC / NOC</span></button><span class="marr" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span><button type="button" class="mbox mis" onclick="go('p5')"><span class="n">5</span>Gestión de la Experiencia del Cliente<span class="sub">CX · CSM</span></button></div>
       <p class="ret">↺ Gestión de Renovaciones regresa a Diseño 90 días antes del vencimiento</p>
       <p class="band-lbl">03 · PROCESOS DE SOPORTE</p>
-      <div class="row3"><a class="mbox muted " href="#pendiente">Gestión y Desarrollo del Talento</a><a class="mbox muted " href="#pendiente">Gestión Financiera y Presupuestal</a><a class="mbox muted " href="#pendiente">Gestión de Compras y Proveedores</a><a class="mbox muted " href="#pendiente">Gestión Legal y Cumplimiento</a><a class="mbox muted " href="#pendiente">Gestión Logística</a><a class="mbox muted " href="#pendiente">Gestión de Servicios Generales</a><a class="mbox muted " href="#pendiente">Marketing y Comunicación</a><a class="mbox muted " href="#pendiente">Gestión de Contratos de Servicios</a><a class="mbox muted new" href="#pendiente">Gestión de Tecnologías de la Información</a></div>
+      <div class="row3"><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión y Desarrollo del Talento</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión Financiera y Presupuestal</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión de Compras y Proveedores</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión Legal y Cumplimiento</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión Logística</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión de Servicios Generales</button><button type="button" class="mbox muted " onclick="go('pendiente')">Marketing y Comunicación</button><button type="button" class="mbox muted " onclick="go('pendiente')">Gestión de Contratos de Servicios</button><button type="button" class="mbox muted new" onclick="go('pendiente')">Gestión de Tecnologías de la Información</button></div>
       <p class="band-lbl">04 · PROCESOS TRANSVERSALES</p>
-      <a class="mbox trans" href="#pendiente">Medición, Análisis y Mejora Continua · Gestión Integrada del SGI (ISO 9001 / 20000-1 / 27001) · Auditorías y Certificaciones</a>
+      <button type="button" class="mbox trans" onclick="go('pendiente')">Medición, Análisis y Mejora Continua · Gestión Integrada del SGI (ISO 9001 / 20000-1 / 27001) · Auditorías y Certificaciones</button>
       <p class="legend"><span class="sw sw-new"></span>Nuevo en el mapa <span class="sw sw-mis"></span>Ficha disponible en esta prueba <span class="sw sw-mut"></span>Ficha en construcción</p>
     </div>
     <div class="side r" aria-hidden="true">SATISFACCIÓN Y VALOR ENTREGADO A LOS STAKEHOLDERS</div>
@@ -382,11 +386,10 @@ a.step:hover{background:#1F6497;color:#fff}
   </details>
 </section>
 <script>
-(function(){
-  function h(){try{parent.postMessage({type:"resize",height:document.documentElement.scrollHeight},"*")}catch(e){}}
-  window.addEventListener("load",h);
-  window.addEventListener("hashchange",function(){window.scrollTo(0,0);h()});
-})();
+function go(id){
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.toggle('on', p.id===id); });
+  window.scrollTo(0,0);
+}
 </script>
 </body>
 </html>
